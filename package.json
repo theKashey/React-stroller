@@ -40,6 +40,6 @@
     "scrollbar"
   ],
   "dependencies": {
-    "faste": "^1.0.0"
+    "faste": "^1.0.3"
   }
 }

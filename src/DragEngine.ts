@@ -1,5 +1,11 @@
 import {AnyHookCallback, faste, HookCallback, Faste, InternalMachine, MessageHandler} from 'faste';
 
+export {
+  Faste,
+  InternalMachine,
+  MessageHandler
+};
+
 const nodeHook: AnyHookCallback = {
   on: ({attrs, trigger, message}) => {
     const hook = (event: any) => {
