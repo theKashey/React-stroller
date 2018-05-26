@@ -15,8 +15,6 @@
     "format": "ts-react-toolbox format",
     "analyze": "ts-react-toolbox analyze"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "ts-react-toolbox": "^0.1.10"
   },
@@ -30,8 +28,17 @@
   "files": [
     "dist"
   ],
-  "keywords": [],
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theKashey/react-stroller.git"
+  },
+  "author": "theKashey <thekashey@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "scroll",
+    "scrollbar"
+  ],
   "dependencies": {
     "faste": "^1.0.0"
   }
