@@ -6,7 +6,7 @@ import {BarSizeFunction, BarView, defaultSizeFunction, StollerBar} from "./Bar";
 import {DragMachine} from "./DragEngine";
 
 import {StrollerProvider} from './context';
-import {subcontainerStyle} from "./Container";
+import {strollerStyle} from "./Container";
 
 export interface StrollerProps {
   axis?: axisTypes;
@@ -70,9 +70,10 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
   private barTransform: string = ''; // store transform on non tracked field
 
   componentDidMount() {
-    this.scrollableParent = this.attach(findScrollableParent(this.scrollContainer || this.topNode!));
+    this.scrollableParent = this.attach(findScrollableParent(this.scrollContainer || this.topNode!, this.props.axis));
     this.isInnerStroller = this.scrollContainer ? !this.topNode!.contains(this.scrollableParent) : true;
     this.onContainerScroll();
+    //setInterval(() => this.onContainerScroll(), 100);
 
     (this.dragMachine as any)._id=this;
 
@@ -165,7 +166,7 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
         ? (scrollSpace - barSize) * (scroll / usableSpace)
         : (space - barSize) * (scroll / usableSpace)
 
-    this.barTransform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(scrollHeight - barSize, top))) + 'px)';
+    this.barTransform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(scrollSpace - barSize, top))) + 'px)';
     if (this.barRef) {
       // update transform via DOM api to make it in sync
       this.barRef.style.transform = this.barTransform;
@@ -206,7 +207,7 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
     const scrollSpace: number = st[ax.scrollSpace];
 
     return (
-      <div ref={this.setTopNode as any} style={{...subcontainerStyle, position: 'static'}}>
+      <div ref={this.setTopNode as any} style={strollerStyle}>
         <StrollerProvider value={{
           setScrollContainer: this.setScrollContainer
         }}>

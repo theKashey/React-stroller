@@ -15,7 +15,7 @@ const getStyle = (scrollWidth: number, overscroll: boolean, axis: axisTypes = 'v
     position: 'relative',
     [axisToOverflow[axis]]: 'scroll',
     overscrollBehavior: overscroll ? 'contain' : 'inherit',
-    paddingRight: (scrollWidth + 24) + 'px',
+    [axis === 'vertical' ? 'paddingRight' : 'paddingBottom']: (scrollWidth + 24) + 'px',
     boxSizing: "content-box",
   }
 };
@@ -26,9 +26,15 @@ const containerStyle: React.CSSProperties = {
   overflow: 'hidden',
 };
 
-export const subcontainerStyle: React.CSSProperties = {
+export const strollerStyle: React.CSSProperties = {
   height: '100%',
   width: '100%',
+  display: 'inline-block',
+};
+
+export const subcontainerStyle: React.CSSProperties = {
+  minHeight: '100%',
+  minWidth: '100%',
   position: 'relative',
   display: 'inline-block',
 };

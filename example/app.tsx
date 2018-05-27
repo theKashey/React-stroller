@@ -13,8 +13,20 @@ export interface AppState {
 
 const Block = styled.div`
   height: 200px;  
+  width: 800px;
   background-color:#f0f0f0;
   position: relative;
+`;
+
+const LongLi = styled.div`
+  display: flex;
+  flex-direction:row;
+  ul {
+    display:flex;
+  }
+  li {
+    padding:5px;
+  }
 `;
 
 const UL = () => (
@@ -123,6 +135,18 @@ export default class App extends React.Component <{}, AppState> {
             </div>
           </div>
         </Block>
+        <hr/>
+        Horizontal
+        <Block>
+          <StrollableContainer axis="horizontal" draggable oppositePosition>
+            <LongLi>
+              <UL/>
+              <UL/>
+              <UL/>
+            </LongLi>
+          </StrollableContainer>
+        </Block>
+        <hr/>
       </AppWrapper>
     )
   }

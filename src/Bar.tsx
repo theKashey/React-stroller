@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {axisTypes} from "./utils";
 
-export type BarView = React.ComponentType<{ dragging?: boolean }> | React.ComponentType<any>;
+export type BarView = React.ComponentType<{ dragging?: boolean, axis?: axisTypes }> | React.ComponentType<any>;
 
 export type BarSizeFunction = (height: number, scrollHeight: number, flags: { dragging: boolean }) => number;
 
@@ -18,11 +18,11 @@ export interface StrollerBarProps {
   barTransform: string
 }
 
-const Bar: BarView = () => (
+const Bar: BarView = ({axis}:{axis:axisTypes}) => (
   <div
     style={{
-      width: '8px',
-      height: '100%',
+      [axis === 'vertical' ? 'width' : 'height']: '8px',
+      [axis === 'vertical' ? 'height' : 'width']: '100%',
       borderRadius: 8,
       backgroundColor: 'rgba(0,0,0,0.5)'
     }}
@@ -93,7 +93,7 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
         willChange: 'transform'
       }}
     >
-      <Internal dragging={dragging}/>
+      <Internal dragging={dragging} axis={axis}/>
     </div>
   );
 }

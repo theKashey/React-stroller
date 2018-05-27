@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-interface Context {
+export interface IStrollerContext {
   setScrollContainer: (ref: HTMLElement | null) => any;
 }
 
 export const context = React.createContext({
   setScrollContainer: () => { throw new Error('StrollerCaptor used without Stroller')}
-} as Context);
+} as IStrollerContext);
 
 export const StrollerProvider = context.Provider;
 export const StrollerContext = context.Consumer;
