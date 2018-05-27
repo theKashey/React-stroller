@@ -38,8 +38,7 @@ import {Stroller} from 'react-stroller';
     axis="horizontal | vertical"
     bar={() =><div>Your Own scroll bar implimentation</div>}
     oppositePosition /* if you want scroll bar on left, or top */
-    draggable /* should it be draggable? */ 
-    barOffset={0} /* the "right" offset */
+    draggable /* should it be draggable? */     
     barHeight={(height, scrollHeight, {dragging}) => dragging ? 42 : 24} /* you can override scroll element height */
   />
 </div>

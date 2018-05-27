@@ -94,7 +94,7 @@ export default class App extends React.Component <{}, AppState> {
             <UL/>
             <div>
               {/*<UL/>*/}
-              <Stroller axis="vertical" draggable barOffset={0}/>
+              <Stroller axis="vertical" draggable/>
             </div>
           </div>
         </Block>

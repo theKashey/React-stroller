@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Component} from 'react';
 
-import {axisTypes, findScrollableParent} from "./utils";
-import {BarHeightFunction, BarView, StollerBar} from "./Bar";
+import {axisToAxis, axisTypes, findScrollableParent} from "./utils";
+import {BarHeightFunction, BarView, defaultHeightFunction, StollerBar} from "./Bar";
 import {DragMachine} from "./DragEngine";
 
 export interface StrollerProps {
@@ -10,7 +10,6 @@ export interface StrollerProps {
   bar?: BarView,
   oppositePosition?: boolean,
   draggable?: boolean
-  barOffset?: number | 'auto';
   barHeightFunction?: BarHeightFunction;
 }
 
@@ -30,7 +29,7 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
     scrollHeight: 0,
     height: 0,
     dragPhase: 'idle',
-    mousePosition: [0, 0]
+    mousePosition: [0, 0],
   };
 
   private dragMachine = DragMachine.create();
@@ -38,6 +37,8 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
   private topNode: HTMLElement | undefined = undefined;
   private scrollableParent: HTMLElement | undefined = undefined;
   private barRef: HTMLElement | undefined = undefined;
+
+  private barTransform: string = ''; // store transform on non tracked field
 
   componentDidMount() {
     this.scrollableParent = this.attach(findScrollableParent(this.topNode!));
@@ -86,12 +87,29 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
     const scrollHeight = topNode.scrollHeight;
     const height = topNode.clientHeight;
 
-    this.setState({
-      scrollTop,
-      scrollHeight,
-      height,
-    });
 
+    if (
+      this.state.scrollHeight !== scrollHeight ||
+      this.state.height !== height
+    ) {
+      this.setState({
+        //scrollTop,
+        scrollHeight,
+        height,
+      });
+    }
+
+    const {dragPhase} = this.state;
+    const {barHeightFunction = defaultHeightFunction, axis = 'vertical'} = this.props;
+    const usableHeight = scrollHeight - height;
+    const barHeight = barHeightFunction(height, scrollHeight, {dragging: dragPhase === 'dragging'});
+    const top = (scrollHeight - barHeight) * (scrollTop / usableHeight);
+
+    this.barTransform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(scrollHeight - barHeight, top))) + 'px)';
+    if (this.barRef) {
+      // update transform via DOM api to make it in sync
+      this.barRef.style.transform = this.barTransform;
+    }
   };
 
   componentDidUpdate() {
@@ -115,7 +133,6 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
       axis = 'vertical',
       oppositePosition = false,
       draggable = false,
-      barOffset,
       barHeightFunction
     } = this.props;
 
@@ -133,8 +150,8 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
           oppositePosition={oppositePosition}
           draggable={draggable}
           dragging={dragPhase === 'dragging'}
-          offset={barOffset}
           heightFunction={barHeightFunction}
+          barTransform={this.barTransform}
         />
         }
         {children}
