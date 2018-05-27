@@ -1,4 +1,7 @@
 # React-stroller
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/theKashey/React-stroller.svg)](https://greenkeeper.io/)
+
 -----
 The right page scroller
 
