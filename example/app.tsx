@@ -24,11 +24,24 @@ const UL = () => (
 )
 
 const Bar = styled.div`
-  width:4px;
-  height:4px;
-  border-radius:4px;
+  width:8px;
+  height:8px;
+  border-radius:8px;
   align-self: center;
   background-color: #F00;
+  
+  transition-property: transform;
+  transition-duration: 300ms;
+  
+  transform-origin: 100% 50%;
+  
+  &:hover {
+    transform: scale(1.5);  
+  }
+  
+  ${(props: any) => props.dragging && `
+    && {transform: scale(2);}   
+  `}
 `;
 
 export default class App extends React.Component <{}, AppState> {
@@ -65,7 +78,12 @@ export default class App extends React.Component <{}, AppState> {
             <UL/>
             <div>
               {/*<UL/>*/}
-              <Stroller axis="vertical" bar={Bar}/>
+              <Stroller
+                axis="vertical"
+                bar={Bar}
+                barHeightFunction={(_1, _2, {dragging}) => dragging ? 16 : 8}
+                draggable
+              />
             </div>
           </Scrollable>
         </Block>

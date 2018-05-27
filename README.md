@@ -34,14 +34,19 @@ import {Stroller} from 'react-stroller';
 
 <div style={{ position:'relative', overflow: 'hidden'}}>
   <Stroller
+    // all props are optional
     axis="horizontal | vertical"
     bar={() =><div>Your Own scroll bar implimentation</div>}
     oppositePosition /* if you want scroll bar on left, or top */
     draggable /* should it be draggable? */ 
     barOffset={0} /* the "right" offset */
+    barHeight={(height, scrollHeight, {dragging}) => dragging ? 42 : 24} /* you can override scroll element height */
   />
 </div>
 ```
+Stroller will find nearest scrollable parent, and set a scroll bar.
+`bar`, you can override is just a view, an internal node for a _real_ Bar Stroller will 
+draw itself. `bar` should fill 100% height and 100% width, and be just _style_. 
 
 ### ScrollableContainer
 Just combine both Components together 

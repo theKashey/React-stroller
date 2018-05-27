@@ -2,15 +2,16 @@ import * as React from 'react';
 import {Component} from 'react';
 
 import {axisTypes, findScrollableParent} from "./utils";
-import {StollerBar} from "./Bar";
+import {BarHeightFunction, BarView, StollerBar} from "./Bar";
 import {DragMachine} from "./DragEngine";
 
 export interface StrollerProps {
   axis?: axisTypes;
-  bar?: React.ComponentType,
+  bar?: BarView,
   oppositePosition?: boolean,
   draggable?: boolean
   barOffset?: number | 'auto';
+  barHeightFunction?: BarHeightFunction;
 }
 
 export interface ComponentState {
@@ -108,7 +109,16 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
   };
 
   render() {
-    const {children, bar, axis = 'vertical', oppositePosition = false, draggable = false, barOffset} = this.props;
+    const {
+      children,
+      bar,
+      axis = 'vertical',
+      oppositePosition = false,
+      draggable = false,
+      barOffset,
+      barHeightFunction
+    } = this.props;
+
     const {scrollTop, scrollHeight, height, dragPhase} = this.state;
 
     return (
@@ -124,6 +134,7 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
           draggable={draggable}
           dragging={dragPhase === 'dragging'}
           offset={barOffset}
+          heightFunction={barHeightFunction}
         />
         }
         {children}

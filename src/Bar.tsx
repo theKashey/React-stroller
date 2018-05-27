@@ -1,20 +1,25 @@
 import * as React from 'react';
 import {axisToAxis, axisTypes, getScrollBarWidth} from "./utils";
 
+export type BarView = React.ComponentType<{ dragging?: boolean }> | React.ComponentType<any>;
+
+export type BarHeightFunction = (height: number, scrollHeight: number, flags: { dragging: boolean }) => number;
+
 export interface StrollerBarProps {
   scrollTop: number;
   scrollHeight: number;
   height: number;
   forwardRef: (ref: HTMLElement) => void;
-  internal?: React.ComponentType;
+  internal?: BarView;
   axis?: axisTypes,
   oppositePosition?: boolean;
   offset?: number | 'auto';
   draggable?: boolean;
   dragging?: boolean;
+  heightFunction?: BarHeightFunction
 }
 
-const Bar = () => (
+const Bar: BarView = () => (
   <div
     style={{
       width: '8px',
@@ -49,6 +54,10 @@ const positions = (offset: number) => ({
   }
 });
 
+const defaultHeightFunction = (height: number, scrollHeight: number): number => (
+  height * (height / scrollHeight)
+);
+
 export const StollerBar: React.SFC<StrollerBarProps> = ({
                                                           scrollTop,
                                                           scrollHeight,
@@ -59,17 +68,18 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
                                                           oppositePosition = false,
                                                           offset = 'auto',
                                                           draggable = false,
-  dragging = false
+                                                          heightFunction = defaultHeightFunction,
+                                                          dragging = false
                                                         }) => {
   if (scrollHeight <= height) {
     return null;
   }
 
   const usableHeight = scrollHeight - height;
-  const barHeight = height * (height / scrollHeight);
+  const barHeight = heightFunction(height, scrollHeight, {dragging});
   const top = (scrollHeight - barHeight) * (scrollTop / usableHeight);
 
-  const Internal = internal || Bar;
+  const Internal: BarView = internal || Bar;
 
   const barOffset = offset === 'auto' ? (getScrollBarWidth() + 24) : offset;
   return (
@@ -89,7 +99,7 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
         willChange: 'transform'
       }}
     >
-      <Internal/>
+      <Internal dragging={dragging}/>
     </div>
   );
 }
