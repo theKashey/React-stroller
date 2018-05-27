@@ -4,6 +4,8 @@ import {AppWrapper} from './styled';
 
 import {Stroller} from "../src/Stroller";
 import {Scrollable} from "../src";
+import {StrollCaptor} from "../src/StrollCaptor";
+import {StrollableContainer} from "../src/StrollableContainer";
 
 export interface AppState {
 
@@ -12,6 +14,7 @@ export interface AppState {
 const Block = styled.div`
   height: 200px;  
   background-color:#f0f0f0;
+  position: relative;
 `;
 
 const UL = () => (
@@ -59,6 +62,28 @@ export default class App extends React.Component <{}, AppState> {
               <Stroller axis="vertical"/>
             </div>
           </Scrollable>
+        </Block>
+        <hr/>
+        Outer
+        <Block>
+          <Stroller axis="vertical" draggable>
+            <Block>
+              <Scrollable axis="vertical">
+                <UL/>
+                <div>
+                  {/*<UL/>*/}
+                  <StrollCaptor/>
+                </div>
+              </Scrollable>
+            </Block>
+          </Stroller>
+        </Block>
+        <hr/>
+        Container
+        <Block>
+          <StrollableContainer axis="vertical" draggable>
+            <UL/>
+          </StrollableContainer>
         </Block>
         <hr/>
         Draggable

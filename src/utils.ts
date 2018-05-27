@@ -16,6 +16,9 @@ export const axisToAxis = {
 export type axisTypes = 'vertical' | 'horizontal';
 
 export const findScrollableParent = (node: HTMLElement, axis: axisTypes = 'vertical'): HTMLElement => {
+  if (node === document.body) {
+    return node;
+  }
   const style = window.getComputedStyle(node);
   const flow: string = style[axisToOverflow[axis] as any];
   if (flow === 'hidden' || flow === 'scroll') {

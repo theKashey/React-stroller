@@ -5,6 +5,9 @@ import {axisToAxis, axisTypes, findScrollableParent} from "./utils";
 import {BarHeightFunction, BarView, defaultHeightFunction, StollerBar} from "./Bar";
 import {DragMachine} from "./DragEngine";
 
+import {StrollerProvider} from './context';
+import {subcontainerStyle} from "./Container";
+
 export interface StrollerProps {
   axis?: axisTypes;
   bar?: BarView,
@@ -21,6 +24,23 @@ export interface ComponentState {
   mousePosition: number[];
 }
 
+const axisToProps = {
+  'vertical': {
+    scroll:'scrollTop',
+    space:'clientHeight',
+    scrollSpace:'scrollHeight',
+    start: 'top',
+    end:'bottom',
+  },
+  'horizontal': {
+    scroll:'scrollLeft',
+    space:'clientWidth',
+    scrollSpace:'scrollWidth',
+    start: 'left',
+    end:'right',
+  }
+};
+
 export class Stroller extends Component<StrollerProps, ComponentState> {
 
   state = {
@@ -36,12 +56,15 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
 
   private topNode: HTMLElement | undefined = undefined;
   private scrollableParent: HTMLElement | undefined = undefined;
+  private scrollContainer: HTMLElement | null = null;
   private barRef: HTMLElement | undefined = undefined;
+  private isInnerStroller: boolean = false;
 
   private barTransform: string = ''; // store transform on non tracked field
 
   componentDidMount() {
-    this.scrollableParent = this.attach(findScrollableParent(this.topNode!));
+    this.scrollableParent = this.attach(findScrollableParent(this.scrollContainer || this.topNode!));
+    this.isInnerStroller = this.scrollContainer ? !this.topNode!.contains(this.scrollableParent) : true;
     this.onContainerScroll();
 
     this.dragMachine
@@ -53,6 +76,7 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
         }
         if (message == 'move') {
           const {mousePosition} = this.state;
+          const axisCoord = this.props.axis === 'vertical' ? 1 : 0;
           const delta = [mousePosition[0] - coords[0], mousePosition[1] - coords[1]];
           const {scrollableParent} = this;
 
@@ -61,8 +85,8 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
           const scrollFactor = scrollHeight / height;
 
           const barPosition = scrollableParent.getBoundingClientRect();
-          if (barPosition.top < coords[1] && barPosition.bottom > coords[1]) {
-            scrollableParent.scrollTop -= delta[1] * scrollFactor;
+          if (barPosition.top < coords[axisCoord] && barPosition.bottom > coords[axisCoord]) {
+            scrollableParent.scrollTop -= delta[axisCoord] * scrollFactor;
           }
 
           this.setState({mousePosition: coords})
@@ -75,9 +99,9 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
     this.dragMachine.destroy();
   }
 
-  attach(parent: HTMLElement) {
-    parent.addEventListener('scroll', this.onContainerScroll);
-    return parent;
+  componentDidUpdate() {
+    this.dragMachine.attrs({enabled: this.props.draggable});
+    this.dragMachine.put('check');
   }
 
   onContainerScroll = () => {
@@ -93,7 +117,6 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
       this.state.height !== height
     ) {
       this.setState({
-        //scrollTop,
         scrollHeight,
         height,
       });
@@ -103,7 +126,10 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
     const {barHeightFunction = defaultHeightFunction, axis = 'vertical'} = this.props;
     const usableHeight = scrollHeight - height;
     const barHeight = barHeightFunction(height, scrollHeight, {dragging: dragPhase === 'dragging'});
-    const top = (scrollHeight - barHeight) * (scrollTop / usableHeight);
+    const top =
+      this.isInnerStroller
+        ? (scrollHeight - barHeight) * (scrollTop / usableHeight)
+        : (height - barHeight) * (scrollTop / usableHeight)
 
     this.barTransform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(scrollHeight - barHeight, top))) + 'px)';
     if (this.barRef) {
@@ -112,10 +138,12 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
     }
   };
 
-  componentDidUpdate() {
-    this.dragMachine.attrs({enabled: this.props.draggable});
-    this.dragMachine.put('check');
+  attach(parent: HTMLElement) {
+    parent.addEventListener('scroll', this.onContainerScroll);
+    return parent;
   }
+
+  setScrollContainer = (ref: HTMLElement | null) => this.scrollContainer = ref;
 
   setTopNode = (topNode: HTMLElement) => this.topNode = topNode;
 
@@ -139,7 +167,12 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
     const {scrollTop, scrollHeight, height, dragPhase} = this.state;
 
     return (
-      <div ref={this.setTopNode as any}>
+      <div ref={this.setTopNode as any} style={subcontainerStyle}>
+        <StrollerProvider value={{
+          setScrollContainer: this.setScrollContainer
+        }}>
+          {children}
+        </StrollerProvider>
         {scrollHeight && <StollerBar
           scrollTop={scrollTop}
           scrollHeight={scrollHeight}
@@ -154,7 +187,6 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
           barTransform={this.barTransform}
         />
         }
-        {children}
       </div>
     );
   }

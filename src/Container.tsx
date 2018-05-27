@@ -26,7 +26,7 @@ const containerStyle: React.CSSProperties = {
   overflow: 'hidden',
 };
 
-const subcontainerStyle: React.CSSProperties = {
+export const subcontainerStyle: React.CSSProperties = {
   height: '100%',
   width: '100%',
   position: 'relative',

@@ -75,9 +75,7 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
     return null;
   }
 
-  //const usableHeight = scrollHeight - height;
   const barHeight = heightFunction(height, scrollHeight, {dragging});
-  //const top = (scrollHeight - barHeight) * (scrollTop / usableHeight);
 
   const Internal: BarView = internal || Bar;
 
@@ -94,8 +92,6 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
         ...(positions[axis][oppositePosition ? 1 : 0] as any),
 
         transform: barTransform + ' translateZ(0)',
-        //'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(scrollHeight - barHeight, top))) + 'px)',
-
         willChange: 'transform'
       }}
     >
