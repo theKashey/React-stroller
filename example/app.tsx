@@ -106,7 +106,7 @@ export default class App extends React.Component <{}, AppState> {
               <Stroller
                 axis="vertical"
                 bar={Bar}
-                barHeightFunction={(_1, _2, {dragging}) => dragging ? 16 : 8}
+                barSizeFunction={(_1, _2, {dragging}) => dragging ? 16 : 8}
                 draggable
               />
             </div>

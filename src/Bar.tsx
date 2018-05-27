@@ -3,19 +3,18 @@ import {axisTypes} from "./utils";
 
 export type BarView = React.ComponentType<{ dragging?: boolean }> | React.ComponentType<any>;
 
-export type BarHeightFunction = (height: number, scrollHeight: number, flags: { dragging: boolean }) => number;
+export type BarSizeFunction = (height: number, scrollHeight: number, flags: { dragging: boolean }) => number;
 
 export interface StrollerBarProps {
-  scrollTop: number;
-  scrollHeight: number;
-  height: number;
+  scrollSpace: number;
+  space: number;
   forwardRef: (ref: HTMLElement) => void;
   internal?: BarView;
   axis?: axisTypes,
   oppositePosition?: boolean;
   draggable?: boolean;
   dragging?: boolean;
-  heightFunction?: BarHeightFunction,
+  sizeFunction?: BarSizeFunction,
   barTransform: string
 }
 
@@ -54,28 +53,27 @@ const positions = {
   }
 };
 
-export const defaultHeightFunction = (height: number, scrollHeight: number): number => (
+export const defaultSizeFunction = (height: number, scrollHeight: number): number => (
   height * (height / scrollHeight)
 );
 
 export const StollerBar: React.SFC<StrollerBarProps> = ({
-                                                          //scrollTop,
-                                                          scrollHeight,
-                                                          height,
+                                                          scrollSpace,
+                                                          space,
                                                           forwardRef,
                                                           internal,
                                                           axis = 'vertical',
                                                           oppositePosition = false,
                                                           draggable = false,
-                                                          heightFunction = defaultHeightFunction,
+                                                          sizeFunction = defaultSizeFunction,
                                                           dragging = false,
                                                           barTransform
                                                         }) => {
-  if (scrollHeight <= height) {
+  if (scrollSpace <= space) {
     return null;
   }
 
-  const barHeight = heightFunction(height, scrollHeight, {dragging});
+  const barHeight = sizeFunction(space, scrollSpace, {dragging});
 
   const Internal: BarView = internal || Bar;
 
@@ -87,7 +85,7 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
         display: 'flex',
         cursor: dragging ? 'grabbing' : (draggable ? 'grab' : 'default'),
 
-        height: Math.round(barHeight) + 'px',
+        [axis == 'vertical' ? 'height' : 'width']: Math.round(barHeight) + 'px',
 
         ...(positions[axis][oppositePosition ? 1 : 0] as any),
 

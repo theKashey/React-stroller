@@ -12,11 +12,13 @@ const nodeHook: AnyHookCallback = {
       trigger(message, event);
       event.preventDefault();
     }
+    console.log('add', message, attrs.node);
     attrs.node.addEventListener(message, hook);
     return [attrs.node, hook]
   },
   off: ({message}, [node, hook]) => {
-    node.removeEventListener(message, hook)
+    const code = node.removeEventListener(message, hook)
+    console.log('remove', message, node, code);
   }
 };
 
