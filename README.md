@@ -98,6 +98,13 @@ As result - on component scroll Strolled will not be moved, removing any possibl
 </div>
 ```
 
+## Testing
+React-stroller is a library, which could not be unit tested. Things like smooth scroll, right overflows and
+ touch-n-feel experience are not something robot could test.   
+Tested manually and carefully by a human being. 
+
+Uses TypeScript and a finite state machine(Faste) underneath, for a better confidence.
+
 # See also
 
 [React-Locky](https://github.com/theKashey/react-locky) - gather a full control under your scroll.
