@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Component} from 'react';
 
 import {axisToAxis, axisTypes, findScrollableParent} from "./utils";
 import {BarSizeFunction, BarView, defaultSizeFunction, StollerBar} from "./Bar";
@@ -48,7 +47,7 @@ const axisToProps = {
   }
 };
 
-export class Stroller extends Component<StrollerProps, ComponentState> {
+export class Stroller extends React.Component<StrollerProps, ComponentState> {
 
   state = {
     scrollWidth: 0,
@@ -81,10 +80,10 @@ export class Stroller extends Component<StrollerProps, ComponentState> {
       .attrs({enabled: this.props.draggable})
       .observe((dragPhase: string) => this.setState({dragPhase}))
       .connect((message: string, coords: number[]) => {
-        if (message == 'down') {
+        if (message === 'down') {
           this.setState({mousePosition: coords})
         }
-        if (message == 'move') {
+        if (message === 'move') {
           const {axis = 'vertical'} = this.props;
           const {mousePosition} = this.state;
           const ax = axisToProps[axis];

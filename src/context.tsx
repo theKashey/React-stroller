@@ -4,9 +4,11 @@ export interface IStrollerContext {
   setScrollContainer: (ref: HTMLElement | null) => any;
 }
 
-export const context = React.createContext({
+const contextDefault:IStrollerContext =  {
   setScrollContainer: () => { throw new Error('StrollerCaptor used without Stroller')}
-} as IStrollerContext);
+};
+
+export const context = React.createContext(contextDefault);
 
 export const StrollerProvider = context.Provider;
 export const StrollerContext = context.Consumer;

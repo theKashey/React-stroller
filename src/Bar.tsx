@@ -85,7 +85,7 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
         display: 'flex',
         cursor: dragging ? 'grabbing' : (draggable ? 'grab' : 'default'),
 
-        [axis == 'vertical' ? 'height' : 'width']: Math.round(barHeight) + 'px',
+        [axis === 'vertical' ? 'height' : 'width']: Math.round(barHeight) + 'px',
 
         ...(positions[axis][oppositePosition ? 1 : 0] as any),
 

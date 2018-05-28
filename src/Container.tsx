@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Component} from 'react';
 import {axisToOverflow, axisTypes, getScrollBarWidth} from "./utils";
 
 export interface ContainerProps {
@@ -39,7 +38,7 @@ export const subcontainerStyle: React.CSSProperties = {
   display: 'inline-block',
 };
 
-export class Strollable extends Component<ContainerProps> {
+export class Strollable extends React.Component<ContainerProps> {
   scrollWidth = 0;
 
   constructor(props: ContainerProps) {
@@ -49,10 +48,9 @@ export class Strollable extends Component<ContainerProps> {
 
   render() {
     const {children, axis, overscroll = false, className} = this.props;
-    const {scrollWidth} = this;
     return (
       <div style={containerStyle} className={className}>
-        <div style={getStyle(scrollWidth, overscroll, axis)}>
+        <div style={getStyle(this.scrollWidth, overscroll, axis)}>
           <div style={subcontainerStyle}>
             {children}
           </div>
