@@ -39,7 +39,7 @@ export const subcontainerStyle: React.CSSProperties = {
   display: 'inline-block',
 };
 
-export class Scrollable extends Component<ContainerProps> {
+export class Strollable extends Component<ContainerProps> {
   scrollWidth = 0;
 
   constructor(props: ContainerProps) {

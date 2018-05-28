@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {AppWrapper} from './styled';
 
 import {Stroller} from "../src/Stroller";
-import {Scrollable} from "../src";
+import {Strollable} from "../src";
 import {StrollCaptor} from "../src/StrollCaptor";
 import {StrollableContainer} from "../src/StrollableContainer";
 

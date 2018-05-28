@@ -1,10 +1,10 @@
-import {Scrollable} from "./Container";
+import {Strollable} from "./Container";
 import {Stroller} from './Stroller';
 import {StrollableContainer} from "./StrollableContainer";
 import {StrollCaptor} from './StrollCaptor';
 
 export {
-  Scrollable,
+  Strollable,
   Stroller,
   StrollableContainer,
   StrollCaptor

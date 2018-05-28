@@ -65,13 +65,15 @@ Stroller will find nearest scrollable parent, and set a scroll bar.
 `bar`, you can override is just a view, an internal node for a _real_ Bar Stroller will 
 draw itself. `bar` should fill 100% height and 100% width, and be just _style_. 
 
-### ScrollableContainer
+### StrollableContainer
 Just combine all Components together in the right order
 ```js
+import {StrollableContainer} from 'react-stroller';
+
 <div style={{height:'100500px'}}>
-    <ScrollableContainer>
+    <StrollableContainer>
       any content
-    </ScrollableContainer>
+    </StrollableContainer>
 </div>
 ``` 
 

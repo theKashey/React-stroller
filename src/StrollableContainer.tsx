@@ -1,4 +1,4 @@
-import {ContainerProps, Scrollable, strollerStyle} from "./Container";
+import {ContainerProps, Strollable, strollerStyle} from "./Container";
 import {Stroller, StrollerProps} from "./Stroller";
 import * as React from "react";
 import {StrollCaptor} from "./StrollCaptor";
@@ -20,10 +20,10 @@ export const StrollableContainer: React.SFC<Props> = ({
       oppositePosition={oppositePosition}
       draggable={draggable}
     >
-      <Scrollable axis={axis} className={className}>
+      <Strollable axis={axis} className={className}>
         <StrollCaptor/>
         {children}
-      </Scrollable>
+      </Strollable>
     </Stroller>
   </div>
 )
