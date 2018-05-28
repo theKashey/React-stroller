@@ -2,7 +2,10 @@ machine:
   node:
     version: 8.9.1
 
-test:
-
+dependencies:
   override:
-    - npm run test:ci
+    - yarn
+
+test:
+  override:
+    - yarn test:ci
