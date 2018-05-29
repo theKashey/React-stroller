@@ -1,12 +1,15 @@
 import * as React from 'react';
-import {axisTypes} from "./utils";
+import {axisToAxis, axisTypes} from "./utils";
 
 export type BarView = React.ComponentType<{ dragging?: boolean, axis?: axisTypes }> | React.ComponentType<any>;
 
 export type BarSizeFunction = (height: number, scrollHeight: number, flags: { dragging: boolean }) => number;
 
+export type BarLocation = "fixed" | "inside" | "outside";
+
 export interface StrollerBarProps {
   scrollSpace: number;
+  scroll: number;
   space: number;
   forwardRef: (ref: HTMLElement) => void;
   internal?: BarView;
@@ -14,11 +17,11 @@ export interface StrollerBarProps {
   oppositePosition?: boolean;
   draggable?: boolean;
   dragging?: boolean;
-  sizeFunction?: BarSizeFunction,
-  barTransform: string
+  sizeFunction?: BarSizeFunction;
+  location: BarLocation;
 }
 
-const Bar: BarView = ({axis}:{axis:axisTypes}) => (
+const Bar: BarView = ({axis}: { axis: axisTypes }) => (
   <div
     style={{
       [axis === 'vertical' ? 'width' : 'height']: '8px',
@@ -58,6 +61,7 @@ export const defaultSizeFunction = (height: number, scrollHeight: number): numbe
 );
 
 export const StollerBar: React.SFC<StrollerBarProps> = ({
+                                                          scroll,
                                                           scrollSpace,
                                                           space,
                                                           forwardRef,
@@ -67,29 +71,37 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
                                                           draggable = false,
                                                           sizeFunction = defaultSizeFunction,
                                                           dragging = false,
-                                                          barTransform
+                                                          location
                                                         }) => {
   if (scrollSpace <= space) {
     return null;
   }
 
-  const barHeight = sizeFunction(space, scrollSpace, {dragging});
+  const barSize = sizeFunction(space, scrollSpace, {dragging});
 
   const Internal: BarView = internal || Bar;
+
+  const usableSpace = scrollSpace - space;
+  const top =
+    location === 'inside'
+      ? (scrollSpace - barSize) * (scroll / usableSpace)
+      : (space - barSize) * (scroll / usableSpace);
+
+  const transform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(scrollSpace - barSize, top))) + 'px)';
 
   return (
     <div
       ref={forwardRef as any}
       style={{
-        position: 'absolute',
+        position: location === 'fixed' ? 'fixed' : 'absolute',
         display: 'flex',
         cursor: dragging ? 'grabbing' : (draggable ? 'grab' : 'default'),
 
-        [axis === 'vertical' ? 'height' : 'width']: Math.round(barHeight) + 'px',
+        [axis === 'vertical' ? 'height' : 'width']: Math.round(barSize) + 'px',
 
         ...(positions[axis][oppositePosition ? 1 : 0] as any),
 
-        transform: barTransform + ' translateZ(0)',
+        transform: transform,
         willChange: 'transform'
       }}
     >

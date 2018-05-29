@@ -15,6 +15,27 @@ export const axisToAxis = {
 
 export type axisTypes = 'vertical' | 'horizontal';
 
+export const axisToProps = {
+  'vertical': {
+    scroll: 'scrollTop',
+    space: 'clientHeight',
+    scrollSpace: 'scrollHeight',
+    start: 'top',
+    end: 'bottom',
+
+    coord: 1,
+  },
+  'horizontal': {
+    scroll: 'scrollLeft',
+    space: 'clientWidth',
+    scrollSpace: 'scrollWidth',
+    start: 'left',
+    end: 'right',
+
+    coord: 0,
+  }
+};
+
 export const findScrollableParent = (node: HTMLElement, axis: axisTypes = 'vertical'): HTMLElement => {
   if (node === document.body) {
     return node;
@@ -42,4 +63,16 @@ export const getScrollBarWidth = (): number => {
     document.body.removeChild(outer);
   }
   return scrollbarWidth;
+}
+
+export const extractValues = (set: any, axis: axisTypes) => {
+  const ax = axisToProps[axis];
+  const scrollSpace: number = set[ax.scrollSpace];
+  const space: number = set[ax.space];
+  const scroll: number = set[ax.scroll];
+  return {
+    scrollSpace,
+    space,
+    scroll
+  };
 }

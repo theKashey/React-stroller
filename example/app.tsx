@@ -65,28 +65,29 @@ export default class App extends React.Component <{}, AppState> {
   render() {
     return (
       <AppWrapper>
+        <Stroller axis="vertical"/>
         Simple
         <Block>
-          <Scrollable axis="vertical">
+          <Strollable axis="vertical">
             <UL/>
             <div>
               {/*<UL/>*/}
               <Stroller axis="vertical"/>
             </div>
-          </Scrollable>
+          </Strollable>
         </Block>
         <hr/>
         Outer
         <Block>
           <Stroller axis="vertical" draggable>
             <Block>
-              <Scrollable axis="vertical">
+              <Strollable axis="vertical">
                 <UL/>
                 <div>
                   {/*<UL/>*/}
                   <StrollCaptor/>
                 </div>
-              </Scrollable>
+              </Strollable>
             </Block>
           </Stroller>
         </Block>
@@ -100,18 +101,18 @@ export default class App extends React.Component <{}, AppState> {
         <hr/>
         Draggable
         <Block>
-          <Scrollable axis="vertical">
+          <Strollable axis="vertical">
             <UL/>
             <div>
               {/*<UL/>*/}
               <Stroller axis="vertical" oppositePosition draggable/>
             </div>
-          </Scrollable>
+          </Strollable>
         </Block>
         <hr/>
         Custom Bar
         <Block>
-          <Scrollable axis="vertical">
+          <Strollable axis="vertical">
             <UL/>
             <div>
               {/*<UL/>*/}
@@ -122,7 +123,7 @@ export default class App extends React.Component <{}, AppState> {
                 draggable
               />
             </div>
-          </Scrollable>
+          </Strollable>
         </Block>
         <hr/>
         In hidden block
