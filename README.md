@@ -2,7 +2,7 @@
   <h1>React-S<sub>c</sub><b>t</b>roller 📜🏃‍</h1>
   <br/>
   <a href="https://circleci.com/gh/theKashey/react-stroller/tree/master">
-     <img src="https://img.shields.io/circleci/project/github/theKashey/react-stroller/master.svg?style=flat-square)" alt="Build status">
+     <img src="https://img.shields.io/circleci/project/github/theKashey/React-stroller/master.svg?style=flat-square" alt="Build status">
   </a>
   
   <a href="https://www.npmjs.com/package/react-stroller">
