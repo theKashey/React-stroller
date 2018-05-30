@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {axisToProps, axisTypes, extractValues, findScrollableParent} from "./utils";
-import {BarLocation, BarSizeFunction, BarView, StollerBar} from "./Bar";
+import {BarLocation, BarSizeFunction, BarView, StollerBar, StrollerBarProps} from "./Bar";
 import {DragMachine} from "./DragEngine";
 
 import {StrollerProvider} from './context';
@@ -10,9 +10,15 @@ import {strollerStyle} from "./Container";
 export interface StrollerProps {
   axis?: axisTypes;
   bar?: BarView,
+  scrollBar?: React.ComponentType<StrollerBarProps>;
   oppositePosition?: boolean,
   draggable?: boolean
+
   barSizeFunction?: BarSizeFunction;
+
+
+  overrideLocation?: BarLocation;
+  targetAxis?: axisTypes;
 }
 
 export interface ComponentState {
@@ -55,7 +61,7 @@ export class Stroller extends React.Component<StrollerProps, ComponentState> {
   componentDidMount() {
     this.scrollableParent = findScrollableParent(this.scrollContainer || this.topNode!, this.props.axis);
 
-    const barLocation = this.scrollableParent === document.body
+    const barLocation = this.props.overrideLocation || this.scrollableParent === document.body
       ? 'fixed'
       : (
         (this.scrollContainer ? !this.topNode!.contains(this.scrollableParent) : true)
@@ -81,20 +87,29 @@ export class Stroller extends React.Component<StrollerProps, ComponentState> {
           this.setState({mousePosition: coords})
         }
         if (message === 'move') {
-          const {axis = 'vertical'} = this.props;
+          const {axis = 'vertical', targetAxis: pTargetAxis} = this.props;
           const {mousePosition} = this.state;
 
-          const ax = axisToProps[axis];
+          const targetAxis= pTargetAxis || axis;
+          const axScroll = axisToProps[axis];
+          const axTarget = axisToProps[targetAxis];
+
           const delta = [mousePosition[0] - coords[0], mousePosition[1] - coords[1]];
           const scrollableParent: any = this.scrollableParent;
 
-          const {scrollSpace, space}: { scrollSpace: number, space: number } = extractValues(scrollableParent, axis);
+          const {space: axisSpace}: {space: number } = extractValues(scrollableParent, axis);
+          const {scrollSpace, space}: { scrollSpace: number, space: number } = extractValues(scrollableParent, targetAxis);
 
-          const scrollFactor = scrollSpace / space;
+          const scrollFactor = (axisSpace/space) * scrollSpace / space;
 
           const barPosition: any = scrollableParent.getBoundingClientRect();
-          if (barPosition[ax.start] < coords[ax.coord] && barPosition[ax.end] > coords[ax.coord]) {
-            scrollableParent[ax.scroll] -= delta[ax.coord] * scrollFactor;
+          if (this.state.barLocation === 'fixed') {
+            const X = axis === 'vertical' ? window.scrollX : window.scrollX - delta[axTarget.coord] * scrollFactor;
+            const Y = axis !== 'vertical' ? window.scrollY : window.scrollY - delta[axTarget.coord] * scrollFactor;
+            window.scrollTo(X, Y);
+          }
+          else if (barPosition[axTarget.start] < coords[axTarget.coord] && barPosition[axTarget.end] > coords[axTarget.coord]) {
+            scrollableParent[axScroll.scroll] -= delta[axTarget.coord] * scrollFactor;
           }
 
           this.setState({mousePosition: coords})
@@ -129,11 +144,11 @@ export class Stroller extends React.Component<StrollerProps, ComponentState> {
       scrollWidth,
       scrollHeight,
 
-      clientWidth: isFixed ? window.innerHeight: clientWidth,
-      clientHeight: isFixed ? window.innerHeight: clientHeight,
+      clientWidth: isFixed ? window.innerHeight : clientWidth,
+      clientHeight: isFixed ? window.innerHeight : clientHeight,
 
-      scrollLeft: isFixed ? window.scrollX: scrollLeft,
-      scrollTop: isFixed ? window.scrollY: scrollTop,
+      scrollLeft: isFixed ? window.scrollX : scrollLeft,
+      scrollTop: isFixed ? window.scrollY : scrollTop,
     });
   };
 
@@ -169,6 +184,8 @@ export class Stroller extends React.Component<StrollerProps, ComponentState> {
 
     const scrollSpace: number = st[ax.scrollSpace];
 
+    const Bar = this.props.scrollBar || StollerBar;
+
     return (
       <div ref={this.setTopNode as any} style={strollerStyle}>
         <StrollerProvider value={{
@@ -176,7 +193,7 @@ export class Stroller extends React.Component<StrollerProps, ComponentState> {
         }}>
           {children}
         </StrollerProvider>
-        {scrollSpace && <StollerBar
+        {scrollSpace && <Bar
           scroll={st[ax.scroll]}
           scrollSpace={scrollSpace}
           space={st[ax.space]}
