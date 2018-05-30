@@ -33,6 +33,7 @@ export interface IComponentState {
 
   dragPhase: string;
   mousePosition: number[];
+  scrollPosition: number[];
 
   barLocation: BarLocation;
 }
@@ -48,6 +49,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
     scrollTop: 0,
     dragPhase: 'idle',
     mousePosition: [0, 0],
+    scrollPosition: [0, 0],
     barLocation: 'inside' as BarLocation
   };
 
@@ -60,6 +62,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
 
   componentDidMount() {
     this.scrollableParent = findScrollableParent(this.scrollContainer || this.topNode!, this.props.axis);
+    const scrollableParent: any = this.scrollableParent;
 
     const barLocation = this.props.overrideLocation || this.scrollableParent === document.body
       ? 'fixed'
@@ -84,7 +87,13 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
       .observe((dragPhase: string) => this.setState({dragPhase}))
       .connect((message: string, coords: number[]) => {
         if (message === 'down') {
-          this.setState({mousePosition: coords})
+          this.setState({
+            mousePosition: coords,
+            scrollPosition:
+              this.state.barLocation === 'fixed'
+                ? [window.scrollX, window.scrollY]
+                : [scrollableParent.scrollLeft, scrollableParent.scrollTop]
+          })
         }
         if (message === 'move') {
           const {axis = 'vertical', targetAxis: pTargetAxis} = this.props;
@@ -95,24 +104,27 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
           const axTarget = axisToProps[targetAxis];
 
           const delta = [mousePosition[0] - coords[0], mousePosition[1] - coords[1]];
-          const scrollableParent: any = this.scrollableParent;
 
-          const {space: axisSpace}: { space: number } = extractValues(scrollableParent, axis);
-          const {scrollSpace, space}: { scrollSpace: number, space: number } = extractValues(scrollableParent, targetAxis);
+          const st: any = this.state;
 
-          const scrollFactor = (axisSpace / space) * scrollSpace / space;
+          const {space: axisSpace, scrollSpace: axisScrollSpace}: { scrollSpace: number, space: number } = extractValues(st, axis);
+          const {scrollSpace, space}: { scrollSpace: number, space: number } = extractValues(st, targetAxis);
+
+          const scrollFactor =
+            axis === targetAxis
+              ? scrollSpace / space
+              : (axisScrollSpace-axisSpace) / space;
 
           const barPosition: any = scrollableParent.getBoundingClientRect();
           if (this.state.barLocation === 'fixed') {
-            const X = axis === 'vertical' ? window.scrollX : window.scrollX - delta[axTarget.coord] * scrollFactor;
-            const Y = axis !== 'vertical' ? window.scrollY : window.scrollY - delta[axTarget.coord] * scrollFactor;
+            const X = axis === 'vertical' ? st.scrollPosition[0] : st.scrollPosition[0] - delta[axTarget.coord] * scrollFactor;
+            const Y = axis !== 'vertical' ? st.scrollPosition[1] : st.scrollPosition[1] - delta[axTarget.coord] * scrollFactor;
             window.scrollTo(X, Y);
           }
           else if (barPosition[axTarget.start] < coords[axTarget.coord] && barPosition[axTarget.end] > coords[axTarget.coord]) {
-            scrollableParent[axScroll.scroll] -= delta[axTarget.coord] * scrollFactor;
+            scrollableParent[axScroll.scroll] = st.scrollPosition[axScroll.coord] - delta[axTarget.coord] * scrollFactor;
           }
 
-          this.setState({mousePosition: coords})
         }
       })
       .start('init')

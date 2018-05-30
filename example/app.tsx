@@ -163,8 +163,6 @@ export default class App extends React.Component <{}, AppState> {
     return (
       <AppWrapper>
         <Strollable axis="vertical">
-          <NyanBarFixed/>
-
           Simple
           <Block>
             <Strollable axis="vertical">
@@ -259,6 +257,7 @@ export default class App extends React.Component <{}, AppState> {
           </div>
           }
         </Strollable>
+        <NyanBarFixed/>
       </AppWrapper>
     )
   }

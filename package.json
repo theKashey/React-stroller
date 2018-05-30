@@ -8,6 +8,7 @@
     "bootstrap": "ts-react-toolbox init",
     "dev": "ts-react-toolbox dev",
     "test:ci": "ts-react-toolbox test --runInBand --coverage",
+    "test:size": "size-limit",
     "build": "ts-react-toolbox build",
     "release": "ts-react-toolbox release",
     "lint": "ts-react-toolbox lint",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "enzyme": "^3.3.0",
+    "size-limit": "^0.18.1",
     "ts-react-toolbox": "^0.1.10"
   },
   "engines": {
