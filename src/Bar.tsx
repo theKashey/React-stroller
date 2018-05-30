@@ -7,13 +7,20 @@ export type BarSizeFunction = (height: number, scrollHeight: number, flags: { dr
 
 export type BarLocation = "fixed" | "inside" | "outside";
 
-export interface StrollerBarProps {
+export interface IScrollParams {
   scrollSpace: number;
   scroll: number;
   space: number;
+}
+
+export interface IStrollerBarProps {
+  mainScroll: IScrollParams;
+  targetScroll?: IScrollParams;
+
   forwardRef: (ref: HTMLElement) => void;
   internal?: BarView;
   axis?: axisTypes,
+  targetAxis?: axisTypes,
   oppositePosition?: boolean;
   draggable?: boolean;
   dragging?: boolean;
@@ -60,10 +67,10 @@ export const defaultSizeFunction = (height: number, scrollHeight: number): numbe
   height * (height / scrollHeight)
 );
 
-export const StollerBar: React.SFC<StrollerBarProps> = ({
-                                                          scroll,
-                                                          scrollSpace,
-                                                          space,
+export const StollerBar: React.SFC<IStrollerBarProps> = ({
+                                                          mainScroll,
+                                                          // targetScroll,
+
                                                           forwardRef,
                                                           internal,
                                                           axis = 'vertical',
@@ -73,21 +80,21 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
                                                           dragging = false,
                                                           location
                                                         }) => {
-  if (scrollSpace <= space) {
+  if (mainScroll.scrollSpace <= mainScroll.space) {
     return null;
   }
 
-  const barSize = sizeFunction(space, scrollSpace, {dragging});
+  const barSize = sizeFunction(mainScroll.space, mainScroll.scrollSpace, {dragging});
 
   const Internal: BarView = internal || Bar;
 
-  const usableSpace = scrollSpace - space;
+  const usableSpace = mainScroll.scrollSpace - mainScroll.space;
   const top =
     location === 'inside'
-      ? (scrollSpace - barSize) * (scroll / usableSpace)
-      : (space - barSize) * (scroll / usableSpace);
+      ? (mainScroll.scrollSpace - barSize) * (mainScroll.scroll / usableSpace)
+      : (mainScroll.space - barSize) * (mainScroll.scroll / usableSpace);
 
-  const transform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(scrollSpace - barSize, top))) + 'px)';
+  const transform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(mainScroll.scrollSpace - barSize, top))) + 'px)';
 
   return (
     <div
@@ -101,7 +108,7 @@ export const StollerBar: React.SFC<StrollerBarProps> = ({
 
         ...(positions[axis][oppositePosition ? 1 : 0] as any),
 
-        transform: transform,
+        transform,
         willChange: 'transform'
       }}
     >

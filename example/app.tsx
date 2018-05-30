@@ -6,7 +6,7 @@ import {Stroller} from "../src/Stroller";
 import {Strollable} from "../src";
 import {StrollCaptor} from "../src/StrollCaptor";
 import {StrollableContainer} from "../src/StrollableContainer";
-import {BarView, StrollerBarProps} from "../src/Bar";
+import {IStrollerBarProps} from "../src/Bar";
 
 export interface AppState {
 
@@ -60,96 +60,99 @@ const Bar = styled.div`
   `}
 `;
 
-const NyanCatH = styled.div`
-  width: 26px;
-  height: 16px;
-  background-image: url('cat.gif');
-  background-size: contain;
-  background-repeat: no-repeat;
-`;
+const positions = {
+  vertical: {
+    0: {
+      top: 0,
+      right: 0,
+    },
+    1: {
+      top: 0,
+      left: 0,
+    }
+  },
 
-const NyanCatV = styled.div`
-  width: 26px;
-  height: 16px;
-  background-image: url('cat.gif');
-  background-repeat: no-repeat;
-  background-size: contain;
-  transform: rotate(-90deg);
-  transform-origin: 100% 0%;
-`;
+  horizontal: {
+    0: {
+      bottom: 0,
+      left: 0,
+    },
+    1: {
+      top: 0,
+      left: 0,
+    },
+  }
+};
 
-const NyanRainbowH = styled.div`
-  width: 100%;
-  height: 100%;
-  background-image:linear-gradient(0deg, transparent, magenta, red, yellow, limegreen, turquoise, blue, magenta, transparent);
-  background-position: -16px center;
-  background-repeat: no-repeat;
-  background-size: contain;
-`
+const NuanCarBar: React.SFC<IStrollerBarProps> = ({
+                                                    mainScroll,
+                                                    targetScroll,
+                                                    forwardRef,
+                                                    location,
+                                                    dragging,
+                                                    draggable,
+                                                    oppositePosition,
 
-const NyanRainbowV = styled.div`
-  width: 100%;
-  height: 100%;
-  background-image:linear-gradient(90deg, transparent, magenta, red, yellow, limegreen, turquoise, blue, magenta, transparent);
-  background-position: center 0;
-  background-repeat: no-repeat;
-  background-size: contain;
-`
+                                                    axis,
+                                                    targetAxis
+                                                  }) => {
+  const factor = mainScroll.scroll / (mainScroll.scrollSpace - mainScroll.space);
+  const length =
+    location === 'inside'
+      ? (targetScroll.scrollSpace) * factor
+      : (targetScroll.space- (targetAxis === 'horizontal' ? 26 : 0)) * factor;
 
-const NyanHolderH = styled.div`
-  height: 16px;
-`;
-
-const NyanHolderV = styled.div`
-  width: 16px;
-`;
-
-const NyanPositionerH = styled.div`
-  position:absolute;
-  bottom: 0;
-  right: 0;
-  width: 26px;
-  height: 16px;
-`;
-
-const NyanPositionerV = styled.div`
-  position:absolute;
-  bottom:0;
-  right:0;
-  width: 16px;
-  height: 26px;
-`;
-
-const NyanTopHolder: React.SFC<{ style: any }> = styled.div`
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:${(props: any) => props.right};
-` as any;
-
-const NuanCarBar: React.SFC<StrollerBarProps> = ({
-                                                   scroll,
-                                                   scrollSpace,
-                                                   space,
-                                                   forwardRef,
-                                                 }) => {
-  const usableSpace = window.innerWidth;
-  const right = usableSpace * scroll / (scrollSpace - window.innerHeight);
+  const W = targetAxis === 'horizontal' ? 'width' : 'height';
+  const H = targetAxis !== 'horizontal' ? 'width' : 'height';
   return (
-    <NyanTopHolder style={{width: Math.round(right) + 'px'}}>
-      <NyanHolderH>
-        <NyanRainbowH/>
-        <NyanPositionerH>
-          <div ref={forwardRef as any}>
-            <NyanCatH/>
-          </div>
-        </NyanPositionerH>
-      </NyanHolderH>
-    </NyanTopHolder>
+    <div
+      style={{
+        position: location === 'fixed' ? 'fixed' : 'absolute',
+        cursor: dragging ? 'grabbing' : (draggable ? 'grab' : 'default'),
+
+        ...(positions[targetAxis][oppositePosition ? 1 : 0] as any),
+        [W]: Math.round(length) + 'px',
+        [H]: '16px',
+        willChange: 'width,height',
+        overflow: 'hidden'
+      }}
+    >
+      <div style={{
+        width: '100%',
+        height: '100%',
+        backgroundImage:
+        'linear-gradient(' + (targetAxis === 'horizontal' ? 0 : -90) + 'deg, transparent, magenta, red, yellow, limegreen, turquoise, blue, magenta, transparent)',
+        backgroundPosition: targetAxis === 'horizontal' ? '-16px center' : 'center -16px',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+      }}/>
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        [W]: '26px',
+        [H]: '16px',
+      }}>
+
+        <div
+          ref={forwardRef as any}
+          style={{
+            width: '26px',
+            height: '16px',
+            backgroundImage: 'url("cat.gif")',
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            ...(targetAxis !== 'horizontal' ? {
+            transform:'rotate(90deg)',
+            transformOrigin:'8px 8px',
+          } : {})
+          }}/>
+      </div>
+    </div>
   );
 }
 
-const NyanBar = () => (
+const NyanBarFixed = () => (
   <Stroller draggable axis="vertical" targetAxis="horizontal" overrideLocation="fixed" scrollBar={NuanCarBar}/>
 )
 
@@ -160,10 +163,7 @@ export default class App extends React.Component <{}, AppState> {
     return (
       <AppWrapper>
         <Strollable axis="vertical">
-          <Stroller axis="vertical" overrideLocation="fixed"/>
-          <NyanBar/>
-          <UL/>
-          <UL/>
+          <NyanBarFixed/>
 
           Simple
           <Block>
@@ -176,7 +176,7 @@ export default class App extends React.Component <{}, AppState> {
             </Strollable>
           </Block>
           <hr/>
-          {0 && <div>
+          {1 && <div>
             Outer
             <Block>
               <Stroller axis="vertical" draggable>
@@ -199,6 +199,14 @@ export default class App extends React.Component <{}, AppState> {
               </StrollableContainer>
             </Block>
             <hr/>
+            Nyan Container
+            <Block>
+              <StrollableContainer axis="vertical" oppositePosition={false} draggable scrollBar={NuanCarBar}>
+                <UL/>
+              </StrollableContainer>
+            </Block>
+            <hr/>
+
             Draggable
             <Block>
               <Strollable axis="vertical">

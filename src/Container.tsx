@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {axisToOverflow, axisTypes, getScrollBarWidth} from "./utils";
 
-export interface ContainerProps {
+export interface IContainerProps {
   axis?: axisTypes;
   className?: string;
   overscroll?: boolean
@@ -38,10 +38,10 @@ export const subcontainerStyle: React.CSSProperties = {
   display: 'inline-block',
 };
 
-export class Strollable extends React.Component<ContainerProps> {
+export class Strollable extends React.Component<IContainerProps> {
   scrollWidth = 0;
 
-  constructor(props: ContainerProps) {
+  constructor(props: IContainerProps) {
     super(props);
     this.scrollWidth = getScrollBarWidth();
   }

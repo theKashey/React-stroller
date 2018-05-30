@@ -16,6 +16,7 @@
     "analyze": "ts-react-toolbox analyze"
   },
   "devDependencies": {
+    "enzyme": "^3.3.0",
     "ts-react-toolbox": "^0.1.10"
   },
   "engines": {

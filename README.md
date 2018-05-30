@@ -13,7 +13,8 @@
 </div>  
 
 -----
-The right page scroller - browser friendly custom draggable scrollbars .
+The right page scroller - browser friendly custom draggable scrollbars.
+[Demo](https://codesandbox.io/s/mm5xq5kv5y) 
 
 # API
 Stroller provides 4 components - to create Scrollable `container`, to draw a `scroll bar` and
@@ -67,7 +68,8 @@ import {Stroller} from 'react-stroller';
     // drop drop Scroller anywhere inside scrollable node 
     // all props are optional
     axis="horizontal | vertical"
-    bar={() =><div>Your Own scroll bar implimentation</div>}
+    bar={() =><div>Your Own scroll _bar_ implementation</div>}
+    scrollBar={() => <div>Your Own __scroll bar__ implementation</div>}
     oppositePosition /* if you want scroll bar on left, or top */
     draggable /* should it be draggable? */     
     barHeight={(height, scrollHeight, {dragging}) => dragging ? 42 : 24} /* you can override scroll element height */
@@ -77,6 +79,8 @@ import {Stroller} from 'react-stroller';
 Stroller will find nearest scrollable parent, and set a scroll bar.
 `bar`, you can override is just a view, an internal node for a _real_ Bar Stroller will 
 draw itself. `bar` should fill 100% height and 100% width, and be just _style_. 
+
+`scrollBar` property currently is not documented, and used only by [react-nyan-scroll](https://github.com/theKashey/react-nyan-stroller).
 
 ### StrollableContainer
 Just combine all Components together in the right order

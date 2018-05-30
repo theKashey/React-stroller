@@ -1,26 +1,43 @@
-import {ContainerProps, Strollable, strollerStyle} from "./Container";
-import {Stroller, StrollerProps} from "./Stroller";
+import {IContainerProps, Strollable, strollerStyle} from "./Container";
+import {Stroller, IStrollerProps} from "./Stroller";
 import * as React from "react";
 import {StrollCaptor} from "./StrollCaptor";
 
-export type Props = ContainerProps & StrollerProps;
+export type Props = IContainerProps & IStrollerProps;
 
 export const StrollableContainer: React.SFC<Props> = ({
                                                         children,
-                                                        axis,
                                                         className,
+
+                                                        axis,
                                                         bar,
+                                                        scrollBar,
                                                         oppositePosition,
                                                         draggable,
+
+                                                        barSizeFunction,
+
+
+                                                        overrideLocation,
+                                                        targetAxis,
+
+                                                        overscroll
                                                       }) => (
   <div style={strollerStyle}>
     <Stroller
       axis={axis}
+      targetAxis={targetAxis}
+
       bar={bar}
+      scrollBar={scrollBar}
+      barSizeFunction={barSizeFunction}
+
       oppositePosition={oppositePosition}
       draggable={draggable}
+
+      overrideLocation={overrideLocation}
     >
-      <Strollable axis={axis} className={className}>
+      <Strollable axis={axis} className={className} overscroll={overscroll}>
         <StrollCaptor/>
         {children}
       </Strollable>

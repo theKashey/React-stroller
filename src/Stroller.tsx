@@ -1,27 +1,27 @@
 import * as React from 'react';
 
 import {axisToProps, axisTypes, extractValues, findScrollableParent} from "./utils";
-import {BarLocation, BarSizeFunction, BarView, StollerBar, StrollerBarProps} from "./Bar";
+import {BarLocation, BarSizeFunction, BarView, StollerBar, IStrollerBarProps} from "./Bar";
 import {DragMachine} from "./DragEngine";
 
 import {StrollerProvider} from './context';
 import {strollerStyle} from "./Container";
 
-export interface StrollerProps {
+export interface IStrollerProps {
   axis?: axisTypes;
+  targetAxis?: axisTypes;
+
   bar?: BarView,
-  scrollBar?: React.ComponentType<StrollerBarProps>;
+  scrollBar?: React.ComponentType<IStrollerBarProps>;
+  barSizeFunction?: BarSizeFunction;
+
   oppositePosition?: boolean,
   draggable?: boolean
 
-  barSizeFunction?: BarSizeFunction;
-
-
   overrideLocation?: BarLocation;
-  targetAxis?: axisTypes;
 }
 
-export interface ComponentState {
+export interface IComponentState {
   scrollWidth: number;
   scrollHeight: number;
 
@@ -37,7 +37,7 @@ export interface ComponentState {
   barLocation: BarLocation;
 }
 
-export class Stroller extends React.Component<StrollerProps, ComponentState> {
+export class Stroller extends React.Component<IStrollerProps, IComponentState> {
 
   state = {
     scrollWidth: 0,
@@ -90,17 +90,17 @@ export class Stroller extends React.Component<StrollerProps, ComponentState> {
           const {axis = 'vertical', targetAxis: pTargetAxis} = this.props;
           const {mousePosition} = this.state;
 
-          const targetAxis= pTargetAxis || axis;
+          const targetAxis = pTargetAxis || axis;
           const axScroll = axisToProps[axis];
           const axTarget = axisToProps[targetAxis];
 
           const delta = [mousePosition[0] - coords[0], mousePosition[1] - coords[1]];
           const scrollableParent: any = this.scrollableParent;
 
-          const {space: axisSpace}: {space: number } = extractValues(scrollableParent, axis);
+          const {space: axisSpace}: { space: number } = extractValues(scrollableParent, axis);
           const {scrollSpace, space}: { scrollSpace: number, space: number } = extractValues(scrollableParent, targetAxis);
 
-          const scrollFactor = (axisSpace/space) * scrollSpace / space;
+          const scrollFactor = (axisSpace / space) * scrollSpace / space;
 
           const barPosition: any = scrollableParent.getBoundingClientRect();
           if (this.state.barLocation === 'fixed') {
@@ -144,7 +144,7 @@ export class Stroller extends React.Component<StrollerProps, ComponentState> {
       scrollWidth,
       scrollHeight,
 
-      clientWidth: isFixed ? window.innerHeight : clientWidth,
+      clientWidth: isFixed ? window.innerWidth : clientWidth,
       clientHeight: isFixed ? window.innerHeight : clientHeight,
 
       scrollLeft: isFixed ? window.scrollX : scrollLeft,
@@ -172,6 +172,7 @@ export class Stroller extends React.Component<StrollerProps, ComponentState> {
       children,
       bar,
       axis = 'vertical',
+      targetAxis,
       oppositePosition = false,
       draggable = false,
       barSizeFunction
@@ -194,15 +195,19 @@ export class Stroller extends React.Component<StrollerProps, ComponentState> {
           {children}
         </StrollerProvider>
         {scrollSpace && <Bar
-          scroll={st[ax.scroll]}
-          scrollSpace={scrollSpace}
-          space={st[ax.space]}
+          mainScroll={extractValues(st, axis)}
+          targetScroll={extractValues(st, targetAxis || axis)}
+
           forwardRef={this.setBarRef}
           internal={bar}
           axis={axis}
+          targetAxis={targetAxis || axis}
+
           oppositePosition={oppositePosition}
+
           draggable={draggable}
           dragging={dragPhase === 'dragging'}
+
           sizeFunction={barSizeFunction}
           location={st.barLocation}
         />
