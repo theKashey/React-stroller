@@ -94,6 +94,10 @@ import {StrollableContainer} from 'react-stroller';
 </div>
 ``` 
 
+- __Do not set `overflow` property for StrollableContainer's parent__, as long it will 
+set it for itself.
+- Always __set height__, you can change it via `flex-grow`, or `flex-shrink`, but it has to be set.
+
 ### StrollCaptor - the secret sauce
 By default Stroller could be not super smooth, as long it will be first "scrolled"
 as a part of scrollable node content, and then will be moved to a new position.
