@@ -47,7 +47,7 @@ Read more about scroll bars here - [Scroll to the future](https://evilmartians.c
 import {Strollable} from 'react-stroller';
 
 <div className="styleWithSizeDefined">
-    <Strollable axis="horizontal | vertical">
+    <Strollable axis="horizontal | vertical" [gap]={gapFromScroll}>
      Strollable will consume 100% width/height - all the possible space 
      setup `position:relative` to the child
      and display any content inside
@@ -73,6 +73,7 @@ import {Stroller} from 'react-stroller';
     oppositePosition /* if you want scroll bar on left, or top */
     draggable /* should it be draggable? */     
     barHeight={(height, scrollHeight, {dragging}) => dragging ? 42 : 24} /* you can override scroll element height */
+    scrollKey={any} // key to indicate that stroller should update data (scroll height)
   />
 </div>
 ```
@@ -88,7 +89,7 @@ Just combine all Components together in the right order
 import {StrollableContainer} from 'react-stroller';
 
 <div style={{height:'100500px'}}>
-    <StrollableContainer>
+    <StrollableContainer [gap]={marginFromScroller} [scrollKey]={any}>
       any content
     </StrollableContainer>
 </div>

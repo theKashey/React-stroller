@@ -34,7 +34,7 @@ const UL = () => (
   <ul>
     {(Array(50) as any)
       .fill(1)
-      .map((_: any, index: number) => <li key={`k${index}`}>{index}</li>)
+      .map((_: any, index: number) => <li key={`k${index}`}>{(index+"xx ").repeat(50)}</li>)
     }
   </ul>
 )
@@ -193,6 +193,13 @@ export default class App extends React.Component <{}, AppState> {
             Container
             <Block>
               <StrollableContainer axis="vertical" draggable>
+                <UL/>
+              </StrollableContainer>
+            </Block>
+            <hr/>
+            Container + GAP
+            <Block>
+              <StrollableContainer axis="vertical" draggable gap={10}>
                 <UL/>
               </StrollableContainer>
             </Block>

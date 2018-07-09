@@ -4,13 +4,16 @@ import {axisToOverflow, axisTypes, getScrollBarWidth} from "./utils";
 export interface IContainerProps {
   axis?: axisTypes;
   className?: string;
-  overscroll?: boolean
+  overscroll?: boolean;
+  gap?: number;
 }
 
-const getStyle = (scrollWidth: number, overscroll: boolean, axis: axisTypes = 'vertical'): React.CSSProperties => {
+const getStyle = (scrollWidth: number, gap: number, overscroll: boolean, axis: axisTypes = 'vertical'): React.CSSProperties => {
   return {
-    width: '100%',
-    height: '100%',
+    width: axis === 'vertical' ? `calc(100% + ${scrollWidth - gap}px)` : '100%',
+    height: axis !== 'vertical' ? `calc(100% + ${scrollWidth - gap}px)` : '100%',
+    // width:'100%',
+    // height:'100%',
     position: 'relative',
     [axisToOverflow[axis]]: 'scroll',
     overscrollBehavior: overscroll ? 'contain' : 'inherit',
@@ -47,10 +50,10 @@ export class Strollable extends React.Component<IContainerProps> {
   }
 
   render() {
-    const {children, axis, overscroll = false, className} = this.props;
+    const {children, axis, overscroll = false, className, gap = 0} = this.props;
     return (
       <div style={containerStyle} className={className}>
-        <div style={getStyle(this.scrollWidth, overscroll, axis)}>
+        <div style={getStyle(this.scrollWidth, gap, overscroll, axis)}>
           <div style={subcontainerStyle}>
             {children}
           </div>

@@ -21,7 +21,10 @@ export const StrollableContainer: React.SFC<Props> = ({
                                                         overrideLocation,
                                                         targetAxis,
 
-                                                        overscroll
+                                                        overscroll,
+
+                                                        scrollKey,
+                                                        gap
                                                       }) => (
   <div style={strollerStyle}>
     <Stroller
@@ -36,8 +39,10 @@ export const StrollableContainer: React.SFC<Props> = ({
       draggable={draggable}
 
       overrideLocation={overrideLocation}
+
+      scrollKey={scrollKey}
     >
-      <Strollable axis={axis} className={className} overscroll={overscroll}>
+      <Strollable axis={axis} className={className} overscroll={overscroll} gap={gap}>
         <StrollCaptor/>
         {children}
       </Strollable>

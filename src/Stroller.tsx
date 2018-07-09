@@ -19,6 +19,8 @@ export interface IStrollerProps {
   draggable?: boolean
 
   overrideLocation?: BarLocation;
+
+  scrollKey?: any;
 }
 
 export interface IComponentState {
@@ -59,6 +61,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
   private scrollableParent: HTMLElement | undefined = undefined;
   private scrollContainer: HTMLElement | null = null;
   private barRef: HTMLElement | undefined = undefined;
+  private attachParent: HTMLElement | Window | undefined = undefined;
 
   componentDidMount() {
     this.scrollableParent = findScrollableParent(this.scrollContainer || this.topNode!, this.props.axis);
@@ -113,7 +116,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
           const scrollFactor =
             axis === targetAxis
               ? scrollSpace / space
-              : (axisScrollSpace-axisSpace) / space;
+              : (axisScrollSpace - axisSpace) / space;
 
           const barPosition: any = scrollableParent.getBoundingClientRect();
           if (this.state.barLocation === 'fixed') {
@@ -132,14 +135,18 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
 
   componentWillUnmount() {
     this.dragMachine.destroy();
+    this.dettach();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps: IStrollerProps) {
     this.dragMachine.attrs({enabled: this.props.draggable});
     this.dragMachine.put('check');
+    if (this.props.scrollKey !== prevProps.scrollKey) {
+      this.onContainerScroll();
+    }
   }
 
-  onContainerScroll = () => {
+  private onContainerScroll = () => {
     const topNode = this.scrollableParent as any;
 
     const scrollTop = topNode.scrollTop;
@@ -164,15 +171,22 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
     });
   };
 
-  attach(parent: HTMLElement | Window) {
+  private attach(parent: HTMLElement | Window) {
+    this.attachParent = parent;
     parent.addEventListener('scroll', this.onContainerScroll);
   }
 
-  setScrollContainer = (ref: HTMLElement | null) => this.scrollContainer = ref;
+  private dettach() {
+    if (this.attachParent) {
+      this.attachParent.addEventListener('scroll', this.onContainerScroll);
+    }
+  }
 
-  setTopNode = (topNode: HTMLElement) => this.topNode = topNode;
+  private setScrollContainer = (ref: HTMLElement | null) => this.scrollContainer = ref;
 
-  setBarRef = (barRef: HTMLElement) => {
+  private setTopNode = (topNode: HTMLElement) => this.topNode = topNode;
+
+  private setBarRef = (barRef: HTMLElement) => {
     this.barRef = barRef;
     this.dragMachine
       .attrs({node: this.barRef})
