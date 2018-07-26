@@ -10,6 +10,7 @@
     "test:ci": "ts-react-toolbox test --runInBand --coverage",
     "test:size": "size-limit",
     "build": "ts-react-toolbox build",
+    "prepublish": "ts-react-toolbox build",
     "release": "ts-react-toolbox release",
     "lint": "ts-react-toolbox lint",
     "static": "ts-react-toolbox publish",

@@ -35,7 +35,7 @@ export const strollerStyle: React.CSSProperties = {
 };
 
 export const subcontainerStyle: React.CSSProperties = {
-  // minHeight: '100%', // and issue for windows
+  // minHeight: '100%', // an issue for windows
   // minWidth: '100%',
   width: '100%',
   height: '100%',
