@@ -4,7 +4,7 @@ import {axisToProps, axisTypes, extractValues, findScrollableParent} from "./uti
 import {BarLocation, BarSizeFunction, BarView, StollerBar, IStrollerBarProps} from "./Bar";
 import {DragMachine} from "./DragEngine";
 
-import {StrollerProvider} from './context';
+import {StrollerProvider, StrollerStateProvider} from './context';
 import {strollerStyle} from "./Container";
 
 export interface IStrollerProps {
@@ -193,6 +193,10 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
       .put('check');
   };
 
+  private strollerProviderValue = {
+    setScrollContainer: this.setScrollContainer
+  };
+
   render() {
     const {
       children,
@@ -215,10 +219,10 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
 
     return (
       <div ref={this.setTopNode as any} style={strollerStyle}>
-        <StrollerProvider value={{
-          setScrollContainer: this.setScrollContainer
-        }}>
-          {children}
+        <StrollerProvider value={this.strollerProviderValue}>
+          <StrollerStateProvider value={this.state}>
+            {children}
+          </StrollerStateProvider>
         </StrollerProvider>
         {scrollSpace && <Bar
           mainScroll={extractValues(st, axis)}

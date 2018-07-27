@@ -122,6 +122,30 @@ As result - on component scroll Strolled will not be moved, removing any possibl
 </div>
 ```
 
+### StrollerState
+It's possible to create "Virtual Container" using React-Strollable.
+
+Stroller will expose internal state via `StrollerState` component, you can _consume_ and then react
+to scroll or resize.
+```js
+<StrollableContainer>
+  <StrollerState>
+   {({
+     scrollWidth: number,
+     scrollHeight: number,
+   
+     clientWidth: number,
+     clientHeight: number,
+   
+     scrollLeft: number,
+     scrollTop: number,
+   }) => (
+     // render elements based on visibility.
+   )}
+  </StrollerState>
+</StrollableContainer>
+```
+
 ## Testing
 React-stroller is a library, which could not be unit tested. Things like smooth scroll, right overflows and
  touch-n-feel experience are not something robot could test.   
