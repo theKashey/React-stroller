@@ -37,6 +37,13 @@ import {StrollableContainer} from 'react-stroller';
 </Block>
 ```
 
+React-stroller consists from 3 parts:
+- `Strollable` - "scrollable" container. It will remove native browser scroll.
+- `Stroller` - the main component, containing all the logic
+- `StrollCaptor` - component, which bypasses scrollable elements, finding the nodes to control.
+
+`StrollableContainer` - just combines them all in the right order.
+
 ### Strollable
 Is a scrollable, but __scroll-bar-less container__. It uses _padding-hack_ to hide browser scrollbars
 on any system.
@@ -123,7 +130,7 @@ As result - on component scroll Strolled will not be moved, removing any possibl
 ```
 
 ### StrollerState
-It's possible to create "Virtual Container" using React-Strollable.
+It's possible to create "Virtual Container", similar to `react-window`, using React-Strollable.
 
 Stroller will expose internal state via `StrollerState` component, you can _consume_ and then react
 to scroll or resize.

@@ -16,7 +16,8 @@ export const StrollableContainer: React.SFC<Props> = ({
                                                         draggable,
 
                                                         barSizeFunction,
-
+                                                        barClassName,
+                                                        SideBar,
 
                                                         overrideLocation,
                                                         targetAxis,
@@ -34,6 +35,8 @@ export const StrollableContainer: React.SFC<Props> = ({
       bar={bar}
       scrollBar={scrollBar}
       barSizeFunction={barSizeFunction}
+      barClassName={barClassName}
+      SideBar={SideBar}
 
       oppositePosition={oppositePosition}
       draggable={draggable}

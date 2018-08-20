@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {axisToProps, axisTypes, extractValues, findScrollableParent} from "./utils";
-import {BarLocation, BarSizeFunction, BarView, StollerBar, IStrollerBarProps} from "./Bar";
+import {BarLocation, BarSizeFunction, BarView, StollerBar, IStrollerBarProps, ISideBar} from "./Bar";
 import {DragMachine} from "./DragEngine";
 
 import {StrollerProvider, StrollerStateProvider} from './context';
@@ -14,6 +14,8 @@ export interface IStrollerProps {
   bar?: BarView,
   scrollBar?: React.ComponentType<IStrollerBarProps>;
   barSizeFunction?: BarSizeFunction;
+  barClassName?: string,
+  SideBar?: ISideBar;
 
   oppositePosition?: boolean,
   draggable?: boolean
@@ -32,6 +34,8 @@ export interface IComponentState {
 
   scrollLeft: number;
   scrollTop: number;
+
+  hasScroll: boolean,
 
   dragPhase: string;
   mousePosition: number[];
@@ -52,7 +56,8 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
     dragPhase: 'idle',
     mousePosition: [0, 0],
     scrollPosition: [0, 0],
-    barLocation: 'inside' as BarLocation
+    barLocation: 'inside' as BarLocation,
+    hasScroll: false,
   };
 
   private dragMachine = DragMachine.create();
@@ -159,6 +164,12 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
 
     const isFixed = this.state.barLocation === 'fixed';
 
+    const st: any = this.state;
+
+    const {axis = 'vertical', targetAxis} = this.props;
+
+    const mainScroll = extractValues(st, axis);
+
     this.setState({
       scrollWidth,
       scrollHeight,
@@ -168,6 +179,8 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
 
       scrollLeft: isFixed ? window.scrollX : scrollLeft,
       scrollTop: isFixed ? window.scrollY : scrollTop,
+
+      hasScroll: mainScroll.scrollSpace > mainScroll.space,
     });
   };
 
@@ -205,7 +218,9 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
       targetAxis,
       oppositePosition = false,
       draggable = false,
-      barSizeFunction
+      barSizeFunction,
+      barClassName,
+      SideBar,
     } = this.props;
 
     const {dragPhase} = this.state;
@@ -218,31 +233,34 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
     const Bar = this.props.scrollBar || StollerBar;
 
     return (
-      <div ref={this.setTopNode as any} style={strollerStyle}>
-        <StrollerProvider value={this.strollerProviderValue}>
-          <StrollerStateProvider value={this.state}>
+      <StrollerStateProvider value={this.state}>
+        <div ref={this.setTopNode as any} style={strollerStyle}>
+          <StrollerProvider value={this.strollerProviderValue}>
             {children}
-          </StrollerStateProvider>
-        </StrollerProvider>
-        {scrollSpace && <Bar
-          mainScroll={extractValues(st, axis)}
-          targetScroll={extractValues(st, targetAxis || axis)}
+          </StrollerProvider>
+          {scrollSpace && <Bar
+            mainScroll={extractValues(st, axis)}
+            targetScroll={extractValues(st, targetAxis || axis)}
 
-          forwardRef={this.setBarRef}
-          internal={bar}
-          axis={axis}
-          targetAxis={targetAxis || axis}
+            forwardRef={this.setBarRef}
+            internal={bar}
+            axis={axis}
+            targetAxis={targetAxis || axis}
 
-          oppositePosition={oppositePosition}
+            oppositePosition={oppositePosition}
 
-          draggable={draggable}
-          dragging={dragPhase === 'dragging'}
+            draggable={draggable}
+            dragging={dragPhase === 'dragging'}
 
-          sizeFunction={barSizeFunction}
-          location={st.barLocation}
-        />
-        }
-      </div>
+            sizeFunction={barSizeFunction}
+            location={st.barLocation}
+
+            className={barClassName}
+            SideBar={SideBar}
+          />
+          }
+        </div>
+      </StrollerStateProvider>
     );
   }
 }

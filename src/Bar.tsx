@@ -3,7 +3,7 @@ import {axisToAxis, axisTypes} from "./utils";
 
 export type BarView = React.ComponentType<{ dragging?: boolean, axis?: axisTypes }> | React.ComponentType<any>;
 
-export type BarSizeFunction = (height: number, scrollHeight: number, flags: { dragging: boolean }) => number;
+export type BarSizeFunction = (height: number, scrollHeight: number, flags: { dragging: boolean, default: number }) => number;
 
 export type BarLocation = "fixed" | "inside" | "outside";
 
@@ -12,6 +12,8 @@ export interface IScrollParams {
   scroll: number;
   space: number;
 }
+
+export type ISideBar = React.SFC<{styles: CSSStyleDeclaration}>;
 
 export interface IStrollerBarProps {
   mainScroll: IScrollParams;
@@ -26,6 +28,9 @@ export interface IStrollerBarProps {
   dragging?: boolean;
   sizeFunction?: BarSizeFunction;
   location: BarLocation;
+
+  className?: string;
+  SideBar?: ISideBar;
 }
 
 const Bar: BarView = ({axis}: { axis: axisTypes }) => (
@@ -68,23 +73,28 @@ export const defaultSizeFunction = (height: number, scrollHeight: number): numbe
 );
 
 export const StollerBar: React.SFC<IStrollerBarProps> = ({
-                                                          mainScroll,
-                                                          // targetScroll,
+                                                           mainScroll,
+                                                           // targetScroll,
+                                                           SideBar,
 
-                                                          forwardRef,
-                                                          internal,
-                                                          axis = 'vertical',
-                                                          oppositePosition = false,
-                                                          draggable = false,
-                                                          sizeFunction = defaultSizeFunction,
-                                                          dragging = false,
-                                                          location
-                                                        }) => {
+                                                           forwardRef,
+                                                           internal,
+                                                           axis = 'vertical',
+                                                           oppositePosition = false,
+                                                           draggable = false,
+                                                           sizeFunction = defaultSizeFunction,
+                                                           dragging = false,
+                                                           location,
+                                                           className
+                                                         }) => {
   if (mainScroll.scrollSpace <= mainScroll.space) {
     return null;
   }
 
-  const barSize = sizeFunction(mainScroll.space, mainScroll.scrollSpace, {dragging});
+  const barSize = sizeFunction(mainScroll.space, mainScroll.scrollSpace, {
+    dragging,
+    default: defaultSizeFunction(mainScroll.space, mainScroll.scrollSpace)
+  });
 
   const Internal: BarView = internal || Bar;
 
@@ -96,23 +106,31 @@ export const StollerBar: React.SFC<IStrollerBarProps> = ({
 
   const transform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(mainScroll.scrollSpace - barSize, top))) + 'px)';
 
+  const styles = {
+    position: location === 'fixed' ? 'fixed' : 'absolute',
+    display: 'flex',
+    cursor: dragging ? 'grabbing' : (draggable ? 'grab' : 'default'),
+
+    [axis === 'vertical' ? 'height' : 'width']: Math.round(barSize) + 'px',
+
+    ...(positions[axis][oppositePosition ? 1 : 0] as any)
+  };
+
   return (
-    <div
-      ref={forwardRef as any}
-      style={{
-        position: location === 'fixed' ? 'fixed' : 'absolute',
-        display: 'flex',
-        cursor: dragging ? 'grabbing' : (draggable ? 'grab' : 'default'),
+    <React.Fragment>
+      {SideBar && <SideBar styles={styles} />}
+      <div
+        ref={forwardRef as any}
+        style={{
+          ...styles,
 
-        [axis === 'vertical' ? 'height' : 'width']: Math.round(barSize) + 'px',
-
-        ...(positions[axis][oppositePosition ? 1 : 0] as any),
-
-        transform,
-        willChange: 'transform'
-      }}
-    >
-      <Internal dragging={dragging} axis={axis}/>
-    </div>
+          transform,
+          willChange: 'transform'
+        }}
+        className={className}
+      >
+        <Internal dragging={dragging} axis={axis}/>
+      </div>
+    </React.Fragment>
   );
 }

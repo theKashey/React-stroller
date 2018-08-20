@@ -32,7 +32,7 @@ const LongLi = styled.div`
 
 const UL = () => (
   <ul>
-    {(Array(50) as any)
+    {(Array(20) as any)
       .fill(1)
       .map((_: any, index: number) => <li key={`k${index}`}>{(index+"xx ").repeat(50)}</li>)
     }
@@ -192,7 +192,7 @@ export default class App extends React.Component <{}, AppState> {
             <hr/>
             Container
             <Block>
-              <StrollableContainer axis="vertical" draggable>
+              <StrollableContainer axis="vertical" draggable barClassName={"test"}>
                 <UL/>
               </StrollableContainer>
             </Block>
