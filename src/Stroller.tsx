@@ -240,7 +240,6 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
           <StrollerProvider value={this.strollerProviderValue}>
             {children}
           </StrollerProvider>
-          {this.state.scrollTop}
           <div>
           {inBetween}
           </div>
