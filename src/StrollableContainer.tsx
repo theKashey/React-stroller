@@ -5,32 +5,38 @@ import {StrollCaptor} from "./StrollCaptor";
 
 export type Props = IContainerProps & IStrollerProps;
 
-export const StrollableContainer: React.SFC<Props> = ({
-                                                        children,
-                                                        className,
+export const StrollableContainer: React.SFC<Props> = (
+  {
+    children,
+    className,
 
-                                                        axis,
-                                                        bar,
-                                                        scrollBar,
-                                                        oppositePosition,
-                                                        draggable,
+    axis,
+    bar,
+    inBetween,
 
-                                                        barSizeFunction,
-                                                        barClassName,
-                                                        SideBar,
+    scrollBar,
+    oppositePosition,
+    draggable,
 
-                                                        overrideLocation,
-                                                        targetAxis,
+    barSizeFunction,
+    barClassName,
+    SideBar,
 
-                                                        overscroll,
+    overrideLocation,
+    targetAxis,
 
-                                                        scrollKey,
-                                                        gap
-                                                      }) => (
+    overscroll,
+
+    scrollKey,
+    gap
+  }
+) => (
   <div style={strollerStyle}>
     <Stroller
       axis={axis}
       targetAxis={targetAxis}
+
+      inBetween={inBetween}
 
       bar={bar}
       scrollBar={scrollBar}

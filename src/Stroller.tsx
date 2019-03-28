@@ -11,6 +11,7 @@ export interface IStrollerProps {
   axis?: axisTypes;
   targetAxis?: axisTypes;
 
+  inBetween?: React.ReactNode;
   bar?: BarView,
   scrollBar?: React.ComponentType<IStrollerBarProps>;
   barSizeFunction?: BarSizeFunction;
@@ -214,6 +215,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
     const {
       children,
       bar,
+      inBetween,
       axis = 'vertical',
       targetAxis,
       oppositePosition = false,
@@ -238,6 +240,10 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
           <StrollerProvider value={this.strollerProviderValue}>
             {children}
           </StrollerProvider>
+          {this.state.scrollTop}
+          <div>
+          {inBetween}
+          </div>
           {scrollSpace && <Bar
             mainScroll={extractValues(st, axis)}
             targetScroll={extractValues(st, targetAxis || axis)}

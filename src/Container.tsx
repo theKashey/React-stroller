@@ -14,6 +14,8 @@ const getStyle = (scrollWidth: number, gap: number, overscroll: boolean, axis: a
     height: axis !== 'vertical' ? `calc(100% + ${scrollWidth - gap}px)` : '100%',
     // width:'100%',
     // height:'100%',
+    maxWidth: 'inherit',
+    maxHeight: 'inherit',
     position: 'relative',
     [axisToOverflow[axis]]: 'scroll',
     overscrollBehavior: overscroll ? 'contain' : 'inherit',
@@ -26,11 +28,15 @@ const containerStyle: React.CSSProperties = {
   height: '100%',
   width: '100%',
   overflow: 'hidden',
+  maxWidth: 'inherit',
+  maxHeight: 'inherit',
 };
 
 export const strollerStyle: React.CSSProperties = {
   height: '100%',
   width: '100%',
+  maxWidth: 'inherit',
+  maxHeight: 'inherit',
   display: 'inline-block',
 };
 
@@ -39,6 +45,8 @@ export const subcontainerStyle: React.CSSProperties = {
   // minWidth: '100%',
   width: '100%',
   height: '100%',
+  // maxWidth: 'inherit',
+  // maxHeight: 'inherit',
   position: 'relative',
   display: 'inline-block',
 };

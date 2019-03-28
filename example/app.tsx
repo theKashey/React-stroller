@@ -2,10 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import {AppWrapper} from './styled';
 
-import {Stroller} from "../src/Stroller";
-import {Strollable} from "../src";
-import {StrollCaptor} from "../src/StrollCaptor";
-import {StrollableContainer} from "../src/StrollableContainer";
+import {Stroller, Strollable, StrollerState, StrollCaptor, StrollableContainer} from "../src";
 import {IStrollerBarProps} from "../src/Bar";
 
 export interface AppState {
@@ -14,6 +11,13 @@ export interface AppState {
 
 const Block = styled.div`
   height: 200px;  
+  width: 800px;
+  background-color:#f0f0f0;
+  position: relative;
+`;
+
+const MHBlock = styled.div`
+  max-height: 200px;  
   width: 800px;
   background-color:#f0f0f0;
   position: relative;
@@ -34,7 +38,7 @@ const UL = () => (
   <ul>
     {(Array(20) as any)
       .fill(1)
-      .map((_: any, index: number) => <li key={`k${index}`}>{(index+"xx ").repeat(50)}</li>)
+      .map((_: any, index: number) => <li key={`k${index}`}>{(index + "xx ").repeat(50)}</li>)
     }
   </ul>
 )
@@ -100,7 +104,7 @@ const NuanCarBar: React.SFC<IStrollerBarProps> = ({
   const length =
     location === 'inside'
       ? (targetScroll.scrollSpace) * factor
-      : (targetScroll.space- (targetAxis === 'horizontal' ? 26 : 0)) * factor;
+      : (targetScroll.space - (targetAxis === 'horizontal' ? 26 : 0)) * factor;
 
   const W = targetAxis === 'horizontal' ? 'width' : 'height';
   const H = targetAxis !== 'horizontal' ? 'width' : 'height';
@@ -121,7 +125,7 @@ const NuanCarBar: React.SFC<IStrollerBarProps> = ({
         width: '100%',
         height: '100%',
         backgroundImage:
-        'linear-gradient(' + (targetAxis === 'horizontal' ? 0 : -90) + 'deg, transparent, magenta, red, yellow, limegreen, turquoise, blue, magenta, transparent)',
+          'linear-gradient(' + (targetAxis === 'horizontal' ? 0 : -90) + 'deg, transparent, magenta, red, yellow, limegreen, turquoise, blue, magenta, transparent)',
         backgroundPosition: targetAxis === 'horizontal' ? '-16px center' : 'center -16px',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'contain',
@@ -143,9 +147,9 @@ const NuanCarBar: React.SFC<IStrollerBarProps> = ({
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
             ...(targetAxis !== 'horizontal' ? {
-            transform:'rotate(90deg)',
-            transformOrigin:'8px 8px',
-          } : {})
+              transform: 'rotate(90deg)',
+              transformOrigin: '8px 8px',
+            } : {})
           }}/>
       </div>
     </div>
@@ -156,12 +160,56 @@ const NyanBarFixed = () => (
   <Stroller draggable axis="vertical" targetAxis="horizontal" overrideLocation="fixed" scrollBar={NuanCarBar}/>
 )
 
+const ScrollIndicator = () => (
+  <StrollerState>
+    {({scrollTop, scrollHeight, clientHeight}) => (
+      <React.Fragment>
+        <div style={{
+          opacity: 1 + (Math.min(16, scrollTop) - 16) / 16,
+          transform: `scaleY(${1 + (Math.min(16, scrollTop) - 16) / 16})`,
+          transformOrigin: '0 0',
+          backgroundColor: '#000',
+          height: 16,
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          right: 0,
+        }}
+        >
+          top {scrollTop} {scrollHeight}
+        </div>
+        <div style={{
+          opacity: (0 + Math.min(16, scrollHeight - (scrollTop + clientHeight)) / 16),
+          transform: `scaleY(${(Math.min(16, scrollHeight - (scrollTop + clientHeight))) / 16})`,
+          transformOrigin: '0 100%',
+          backgroundColor: '#000',
+          height: 16,
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          right: 0,
+        }}
+        >
+          bottom
+        </div>
+      </React.Fragment>
+    )}
+  </StrollerState>
+);
+
 export default class App extends React.Component <{}, AppState> {
   state: AppState = {}
 
   render() {
     return (
       <AppWrapper>
+        max-height
+        <MHBlock>
+          <StrollableContainer axis="vertical" inBetween={<ScrollIndicator/>}>
+            <UL/>
+          </StrollableContainer>
+        </MHBlock>
+
         <Strollable axis="vertical">
           Simple
           <Block>

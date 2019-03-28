@@ -10,10 +10,9 @@ const contextDefault:IStrollerContext =  {
 };
 
 export const context = React.createContext(contextDefault);
-export const stateContext = React.createContext({} as IStrollerState);
-
 export const StrollerProvider = context.Provider;
 export const StrollerContext = context.Consumer;
 
+export const stateContext = React.createContext({} as IStrollerState);
 export const StrollerStateProvider = stateContext.Provider;
 export const StrollerState = stateContext.Consumer;
