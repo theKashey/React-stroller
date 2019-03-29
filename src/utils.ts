@@ -53,6 +53,9 @@ export const findScrollableParent = (node: HTMLElement, axis: axisTypes = 'verti
 let scrollbarWidth = -1;
 
 export const getScrollBarWidth = (): number => {
+  if(typeof document === 'undefined'){
+    return 0;
+  }
   if (scrollbarWidth < 0) {
     const outer = document.createElement('div');
     const inner = document.createElement('div');

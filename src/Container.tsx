@@ -52,12 +52,7 @@ export const subcontainerStyle: React.CSSProperties = {
 };
 
 export class Strollable extends React.Component<IContainerProps> {
-  scrollWidth = 0;
-
-  constructor(props: IContainerProps) {
-    super(props);
-    this.scrollWidth = getScrollBarWidth();
-  }
+  scrollWidth = getScrollBarWidth();
 
   render() {
     const {children, axis, overscroll = false, className, gap = 0} = this.props;
