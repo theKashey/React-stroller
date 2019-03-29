@@ -54,7 +54,7 @@ let scrollbarWidth = -1;
 
 export const getScrollBarWidth = (): number => {
   if(typeof document === 'undefined'){
-    return 0;
+    return 24;
   }
   if (scrollbarWidth < 0) {
     const outer = document.createElement('div');
