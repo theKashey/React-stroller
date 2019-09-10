@@ -129,8 +129,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
             const X = axis === 'vertical' ? st.scrollPosition[0] : st.scrollPosition[0] - delta[axTarget.coord] * scrollFactor;
             const Y = axis !== 'vertical' ? st.scrollPosition[1] : st.scrollPosition[1] - delta[axTarget.coord] * scrollFactor;
             window.scrollTo(X, Y);
-          }
-          else if (barPosition[axTarget.start] < coords[axTarget.coord] && barPosition[axTarget.end] > coords[axTarget.coord]) {
+          } else if (barPosition[axTarget.start] < coords[axTarget.coord] && barPosition[axTarget.end] > coords[axTarget.coord]) {
             scrollableParent[axScroll.scroll] = st.scrollPosition[axScroll.coord] - delta[axTarget.coord] * scrollFactor;
           }
 
@@ -241,28 +240,32 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
             {children}
           </StrollerProvider>
           <div>
-          {inBetween}
+            {inBetween}
           </div>
-          {scrollSpace && <Bar
-            mainScroll={extractValues(st, axis)}
-            targetScroll={extractValues(st, targetAxis || axis)}
+          {scrollSpace
+            ? (
+              <Bar
+                mainScroll={extractValues(st, axis)}
+                targetScroll={extractValues(st, targetAxis || axis)}
 
-            forwardRef={this.setBarRef}
-            internal={bar}
-            axis={axis}
-            targetAxis={targetAxis || axis}
+                forwardRef={this.setBarRef}
+                internal={bar}
+                axis={axis}
+                targetAxis={targetAxis || axis}
 
-            oppositePosition={oppositePosition}
+                oppositePosition={oppositePosition}
 
-            draggable={draggable}
-            dragging={dragPhase === 'dragging'}
+                draggable={draggable}
+                dragging={dragPhase === 'dragging'}
 
-            sizeFunction={barSizeFunction}
-            location={st.barLocation}
+                sizeFunction={barSizeFunction}
+                location={st.barLocation}
 
-            className={barClassName}
-            SideBar={SideBar}
-          />
+                className={barClassName}
+                SideBar={SideBar}
+              />
+            )
+            : null
           }
         </div>
       </StrollerStateProvider>
