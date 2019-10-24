@@ -100,12 +100,12 @@ export const StollerBar: React.SFC<IStrollerBarProps> = ({
   const Internal: BarView = internal || Bar;
 
   const usableSpace = (mainScroll.scrollSpace - mainScroll.space);
-  const sizeFactor = (mainScroll.targetSpace / mainScroll.space);
+
   const endPosition = location === 'inside'
     ? (mainScroll.scrollSpace - barSize)
     : (mainScroll.targetSpace - barSize);
 
-  const top = sizeFactor * endPosition * mainScroll.scroll / usableSpace;
+  const top = endPosition * mainScroll.scroll / usableSpace;
 
   const transform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(endPosition, top))) + 'px)';
 
