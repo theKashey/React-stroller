@@ -17,6 +17,7 @@
     "analyze": "ts-react-toolbox analyze"
   },
   "devDependencies": {
+    "@types/detect-passive-events": "^1.0.0",
     "enzyme": "^3.3.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -46,6 +47,7 @@
     "custom scrollbar"
   ],
   "dependencies": {
+    "detect-passive-events": "^1.0.4",
     "faste": "^1.0.3",
     "tslib": "^1.0.0"
   },

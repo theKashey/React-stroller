@@ -89,6 +89,7 @@ import {Stroller} from 'react-stroller';
     draggable /* should it be draggable? */     
     barHeight={(height, scrollHeight, {dragging}) => dragging ? 42 : 24} /* you can override scroll element height */
     scrollKey={any} // key to indicate that stroller should update data (scroll height)
+    passive={true} // enable passive scroll observation. Better for perf, worse for scroll synchronization
   />
 </div>
 ```

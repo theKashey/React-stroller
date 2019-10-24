@@ -1,4 +1,5 @@
 import * as React from 'react';
+import detectPassiveEvent from 'detect-passive-events';
 
 import {axisToProps, axisTypes, extractValues, findScrollableParent} from "./utils";
 import {BarLocation, BarSizeFunction, BarView, StollerBar, IStrollerBarProps, ISideBar} from "./Bar";
@@ -24,6 +25,8 @@ export interface IStrollerProps {
   overrideLocation?: BarLocation;
 
   scrollKey?: any;
+
+  passive?: boolean;
 }
 
 export interface IComponentState {
@@ -72,7 +75,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
   private scrollableParent: HTMLElement | undefined = undefined;
   private scrollContainer: HTMLElement | null = null;
   private barRef: HTMLElement | undefined = undefined;
-  private attachParent: HTMLElement | Window | undefined = undefined;
+  private dettachParentCallback: null | (() => void);
 
   componentDidMount() {
     this.scrollableParent = findScrollableParent(this.scrollContainer || this.topNode!, this.props.axis);
@@ -169,7 +172,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
     const targetHeight = this.topNode.clientHeight;
 
     const clientWidth = topNode.clientWidth;
-    const clientHeight =topNode.clientHeight;
+    const clientHeight = topNode.clientHeight;
 
 
     const isFixed = this.state.barLocation === 'fixed';
@@ -198,13 +201,19 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
   };
 
   private attach(parent: HTMLElement | Window) {
-    this.attachParent = parent;
-    parent.addEventListener('scroll', this.onContainerScroll);
+    this.dettach();
+    const {passive} = this.props;
+    const options: any = passive && detectPassiveEvent.hasSupport ? {passive: true} : undefined;
+    parent.addEventListener('scroll', this.onContainerScroll, options);
+    this.dettachParentCallback = () => {
+      parent.removeEventListener('scroll', this.onContainerScroll, options);
+    };
   }
 
   private dettach() {
-    if (this.attachParent) {
-      this.attachParent.addEventListener('scroll', this.onContainerScroll);
+    if (this.dettachParentCallback) {
+      this.dettachParentCallback();
+      this.dettachParentCallback = null;
     }
   }
 
