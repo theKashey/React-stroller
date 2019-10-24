@@ -18,11 +18,11 @@ The right page scroller - browser friendly custom draggable scrollbars.
 
 # Capabilities
 
-- display any custom scroll bar, even, well, [nyan-cat](https://github.com/theKashey/react-nyan-stroller) scroll bar
-- vertical and horizontal, as well as not matching main scroll axis - like displaying horizontal "reading indicator" for the vertical scroll.
-- display scrollbar 1) inside 2) outside 3) at window the target scrollable
-- support for "ScrollIndicators"
-- support for passive scroll observation (🥳 performance)
+- ⛓display any custom scroll bar, even, well, [nyan-cat](https://github.com/theKashey/react-nyan-stroller)🐈🏳️‍🌈🏳️‍🌈🏳️‍🌈 scroll bar
+- 📜 vertical and horizontal, as well as not matching main scroll axis - like displaying horizontal "reading indicator" for the vertical scroll.
+- 👨‍🔬display scrollbar 1) inside 2) outside 3) at window the target scrollable
+- 🤓support for "ScrollIndicators"
+- 🚀support for passive scroll observation (🥳 performance)
 
 # API
 Stroller provides 4 components - to create Scrollable `container`, to draw a `scroll bar` and
