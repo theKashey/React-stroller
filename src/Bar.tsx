@@ -11,9 +11,10 @@ export interface IScrollParams {
   scrollSpace: number;
   scroll: number;
   space: number;
+  targetSpace: number;
 }
 
-export type ISideBar = React.SFC<{styles: CSSStyleDeclaration}>;
+export type ISideBar = React.SFC<{ styles: CSSStyleDeclaration }>;
 
 export interface IStrollerBarProps {
   mainScroll: IScrollParams;
@@ -98,13 +99,15 @@ export const StollerBar: React.SFC<IStrollerBarProps> = ({
 
   const Internal: BarView = internal || Bar;
 
-  const usableSpace = mainScroll.scrollSpace - mainScroll.space;
-  const top =
-    location === 'inside'
-      ? (mainScroll.scrollSpace - barSize) * (mainScroll.scroll / usableSpace)
-      : (mainScroll.space - barSize) * (mainScroll.scroll / usableSpace);
+  const usableSpace = (mainScroll.scrollSpace - mainScroll.space);
+  const sizeFactor = (mainScroll.targetSpace / mainScroll.space);
+  const endPosition = location === 'inside'
+    ? (mainScroll.scrollSpace - barSize)
+    : (mainScroll.targetSpace - barSize);
 
-  const transform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(mainScroll.scrollSpace - barSize, top))) + 'px)';
+  const top = sizeFactor * endPosition * mainScroll.scroll / usableSpace;
+
+  const transform = 'translate' + (axisToAxis[axis]) + '(' + (Math.max(0, Math.min(endPosition, top))) + 'px)';
 
   const styles = {
     position: location === 'fixed' ? 'fixed' : 'absolute',
@@ -118,7 +121,7 @@ export const StollerBar: React.SFC<IStrollerBarProps> = ({
 
   return (
     <React.Fragment>
-      {SideBar && <SideBar styles={styles} />}
+      {SideBar && <SideBar styles={styles}/>}
       <div
         ref={forwardRef as any}
         style={{

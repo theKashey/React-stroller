@@ -16,6 +16,14 @@
 The right page scroller - browser friendly custom draggable scrollbars.
 [Demo](https://codesandbox.io/s/mm5xq5kv5y) 
 
+# Capabilities
+
+- display any custom scroll bar, even, well, [nyan-cat](https://github.com/theKashey/react-nyan-stroller) scroll bar
+- vertical and horizontal, as well as not matching main scroll axis - like displaying horizontal "reading indicator" for the vertical scroll.
+- display scrollbar 1) inside 2) outside 3) at window the target scrollable
+- support for "ScrollIndicators"
+- support for passive scroll observation (🥳 performance)
+
 # API
 Stroller provides 4 components - to create Scrollable `container`, to draw a `scroll bar` and
 to `combine` all together. The 4th component is a magic one - `StrollCaptor`.
@@ -151,6 +159,48 @@ to scroll or resize.
    )}
   </StrollerState>
 </StrollableContainer>
+```
+
+## ScrollIndicators
+Just read stroller state and display them
+```js
+import {StrollerState} from 'react-stroller';
+export const VerticalScrollIndicator= () => (
+  <StrollerState>
+    {({scrollTop, scrollHeight, clientHeight}) => (
+      <>
+        <span          
+          className={cx(
+            styles['indicator--top'],            
+            scrollTop === 0 && styles['indicator--hidden']
+          )}
+        />
+        <span
+          className={cx(
+            styles['indicator--bottom'],
+            scrollTop + clientHeight >= scrollHeight && styles['indicator--hidden']
+          )}
+        />
+      </>
+    )}
+  </StrollerState>
+);
+```
+
+## Separated scrollbar
+You might display scrollbar in the parent, while observing scroll at the children
+```js
+<Stroller> // "Bar" would be displayed on this level
+  any code
+  <DivWithKnownHeight> // we are "observing" scroll in this node
+    <Strollable> 
+      <StrollCaptor/>
+        {children}
+    </Strollable>
+    <VerticalScrollIndicator/>
+  </DivWithKnownHeight>
+  any code
+</Stroller>            
 ```
 
 ## Testing

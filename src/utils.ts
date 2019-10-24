@@ -19,6 +19,7 @@ export const axisToProps = {
   'vertical': {
     scroll: 'scrollTop',
     space: 'clientHeight',
+    targetSpace: 'targetHeight',
     scrollSpace: 'scrollHeight',
     start: 'top',
     end: 'bottom',
@@ -28,6 +29,7 @@ export const axisToProps = {
   'horizontal': {
     scroll: 'scrollLeft',
     space: 'clientWidth',
+    targetSpace: 'targetWidth',
     scrollSpace: 'scrollWidth',
     start: 'left',
     end: 'right',
@@ -72,10 +74,13 @@ export const extractValues = (set: any, axis: axisTypes) => {
   const ax = axisToProps[axis];
   const scrollSpace: number = set[ax.scrollSpace];
   const space: number = set[ax.space];
+  const targetSpace: number = set[ax.targetSpace];
   const scroll: number = set[ax.scroll];
+
   return {
     scrollSpace,
     space,
+    targetSpace,
     scroll
   };
 }

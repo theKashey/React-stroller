@@ -33,6 +33,9 @@ export interface IComponentState {
   clientWidth: number;
   clientHeight: number;
 
+  targetWidth: number;
+  targetHeight: number;
+
   scrollLeft: number;
   scrollTop: number;
 
@@ -52,6 +55,8 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
     scrollHeight: 0,
     clientWidth: 0,
     clientHeight: 0,
+    targetWidth: 0,
+    targetHeight: 0,
     scrollLeft: 0,
     scrollTop: 0,
     dragPhase: 'idle',
@@ -116,13 +121,13 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
 
           const st: any = this.state;
 
-          const {space: axisSpace, scrollSpace: axisScrollSpace}: { scrollSpace: number, space: number } = extractValues(st, axis);
-          const {scrollSpace, space}: { scrollSpace: number, space: number } = extractValues(st, targetAxis);
+          const {space: axisSpace, scrollSpace: axisScrollSpace} = extractValues(st, axis);
+          const {scrollSpace, targetSpace} = extractValues(st, targetAxis);
 
           const scrollFactor =
             axis === targetAxis
-              ? scrollSpace / space
-              : (axisScrollSpace - axisSpace) / space;
+              ? scrollSpace / targetSpace
+              : (axisScrollSpace - axisSpace) / targetSpace;
 
           const barPosition: any = scrollableParent.getBoundingClientRect();
           if (this.state.barLocation === 'fixed') {
@@ -154,13 +159,18 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
   private onContainerScroll = () => {
     const topNode = this.scrollableParent as any;
 
-    const scrollTop = topNode.scrollTop;
-    const scrollHeight = topNode.scrollHeight;
-    const clientHeight = topNode.clientHeight;
-
     const scrollLeft = topNode.scrollLeft;
+    const scrollTop = topNode.scrollTop;
+
     const scrollWidth = topNode.scrollWidth;
+    const scrollHeight = topNode.scrollHeight;
+
+    const targetWidth = this.topNode.clientWidth;
+    const targetHeight = this.topNode.clientHeight;
+
     const clientWidth = topNode.clientWidth;
+    const clientHeight =topNode.clientHeight;
+
 
     const isFixed = this.state.barLocation === 'fixed';
 
@@ -173,6 +183,9 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
     this.setState({
       scrollWidth,
       scrollHeight,
+
+      targetWidth,
+      targetHeight,
 
       clientWidth: isFixed ? window.innerWidth : clientWidth,
       clientHeight: isFixed ? window.innerHeight : clientHeight,

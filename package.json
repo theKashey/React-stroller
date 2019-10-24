@@ -1,7 +1,7 @@
 {
   "name": "react-stroller",
   "version": "1.6.4",
-  "description": "React custom scrollbars",
+  "description": "React custom scrollbars, I mean strollbars",
   "scripts": {
     "test": "ts-react-toolbox test",
     "bootstrap": "ts-react-toolbox init",
@@ -42,7 +42,8 @@
   "keywords": [
     "react",
     "scroll",
-    "scrollbar"
+    "scrollbar",
+    "custom scrollbar"
   ],
   "dependencies": {
     "faste": "^1.0.3",
