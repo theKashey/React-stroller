@@ -6,6 +6,7 @@ export interface IContainerProps {
   className?: string;
   overscroll?: boolean;
   gap?: number;
+  containerStyles?: CSSStyleDeclaration;
 }
 
 const getStyle = (scrollWidth: number, gap: number, overscroll: boolean, axis: axisTypes = 'vertical'): React.CSSProperties => {
@@ -48,18 +49,18 @@ export const subcontainerStyle: React.CSSProperties = {
   // maxWidth: 'inherit',
   // maxHeight: 'inherit',
   position: 'relative',
-  display: 'inline-block',
+  // display: 'inline-block', // WHY?
 };
 
 export class Strollable extends React.Component<IContainerProps> {
   scrollWidth = getScrollBarWidth();
 
   render() {
-    const {children, axis, overscroll = false, className, gap = 0} = this.props;
+    const {children, axis, overscroll = false, className, gap = 0, containerStyles = {}} = this.props;
     return (
       <div style={containerStyle} className={className}>
         <div style={getStyle(this.scrollWidth, gap, overscroll, axis)}>
-          <div style={subcontainerStyle}>
+          <div style={{...subcontainerStyle, ...containerStyles}}>
             {children}
           </div>
         </div>
