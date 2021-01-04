@@ -27,6 +27,7 @@ export const StrollableContainer: React.SFC<Props> = (
 
     overscroll,
     containerStyles,
+    minScrollbarWidth,
 
     scrollKey,
     gap
@@ -52,7 +53,14 @@ export const StrollableContainer: React.SFC<Props> = (
 
       scrollKey={scrollKey}
     >
-      <Strollable axis={axis} className={className} overscroll={overscroll} gap={gap} containerStyles={containerStyles}>
+      <Strollable
+        axis={axis}
+        className={className}
+        overscroll={overscroll}
+        gap={gap}
+        containerStyles={containerStyles}
+        minScrollbarWidth={minScrollbarWidth}
+      >
         <StrollCaptor/>
         {children}
       </Strollable>
