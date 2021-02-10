@@ -39,7 +39,7 @@ export const strollerStyle: React.CSSProperties = {
   width: '100%',
   maxWidth: 'inherit',
   maxHeight: 'inherit',
-  display: 'inline-block',
+  // display: 'inline-block',  // WHY?
 };
 
 export const subcontainerStyle: React.CSSProperties = {
