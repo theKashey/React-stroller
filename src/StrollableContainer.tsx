@@ -30,7 +30,9 @@ export const StrollableContainer: React.SFC<Props> = (
     minScrollbarWidth,
 
     scrollKey,
-    gap
+    gap,
+
+    onScroll
   }
 ) => (
   <div style={strollerStyle}>
@@ -52,6 +54,8 @@ export const StrollableContainer: React.SFC<Props> = (
       overrideLocation={overrideLocation}
 
       scrollKey={scrollKey}
+
+      onScroll={onScroll}
     >
       <Strollable
         axis={axis}
