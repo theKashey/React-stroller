@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should render correctly Strollable 1`] = `
+<div>
+  <div
+    style="height: 100%; width: 100%; overflow: hidden; max-width: inherit; max-height: inherit;"
+  >
+    <div
+      style="width: calc(100% + 0px); height: 100%; max-width: inherit; max-height: inherit; position: relative; overflow-y: scroll; padding-right: 24px; box-sizing: content-box;"
+    >
+      <div
+        style="width: 100%; height: 100%; position: relative;"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Should render correctly StrollableContainer 1`] = `
+<div>
+  <div
+    style="height: 100%; width: 100%; max-width: inherit; max-height: inherit;"
+  >
+    <div
+      style="height: 100%; width: 100%; max-width: inherit; max-height: inherit;"
+    >
+      <div
+        style="height: 100%; width: 100%; overflow: hidden; max-width: inherit; max-height: inherit;"
+      >
+        <div
+          style="width: calc(100% + 0px); height: 100%; max-width: inherit; max-height: inherit; position: relative; overflow-y: scroll; padding-right: 24px; box-sizing: content-box;"
+        >
+          <div
+            style="width: 100%; height: 100%; position: relative;"
+          >
+            <div />
+            child
+          </div>
+        </div>
+      </div>
+      <div />
+    </div>
+  </div>
+</div>
+`;

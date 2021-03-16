@@ -1,26 +1,16 @@
 import * as React from 'react';
-import {mount} from 'enzyme';
-import * as ReactDom from 'react-dom/server';
+import { render } from '@testing-library/react';
 import {Strollable, StrollableContainer} from '../src';
 
-describe('Specs', () => {
-  it('node Strollable', () => {
-    ReactDom.renderToString(<Strollable/>);
+describe('Should render correctly', () => {
+  it('Strollable', () => {
+    const { container } = render(<Strollable/>);
+
+    expect(container).toMatchSnapshot();
   });
 
-  it('node StrollableContainer', () => {
-    ReactDom.renderToString(<StrollableContainer>child</StrollableContainer>);
-    //expect(document).toBe(undefined);
+  it('StrollableContainer', () => {
+   const { container } = render(<StrollableContainer>child</StrollableContainer>);
+      expect(container).toMatchSnapshot();
   });
-
-  if(typeof document !== "undefined") {
-    it('node Strollable', () => {
-      mount(<Strollable/>);
-    });
-
-    it('node StrollableContainer', () => {
-      mount(<StrollableContainer>child</StrollableContainer>);
-      //expect(document).toBe(undefined);
-    });
-  }
 });
