@@ -1,5 +1,5 @@
 import * as React from 'react';
-import detectPassiveEvent from 'detect-passive-events';
+import {supportsPassiveEvents} from 'detect-passive-events';
 
 import {axisToProps, axisTypes, extractValues, findScrollableParent} from "./utils";
 import {BarLocation, BarSizeFunction, BarView, StollerBar, IStrollerBarProps, ISideBar} from "./Bar";
@@ -203,7 +203,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
   private attach(parent: HTMLElement | Window) {
     this.dettach();
     const {passive} = this.props;
-    const options: any = passive && detectPassiveEvent.hasSupport ? {passive: true} : undefined;
+    const options: any = passive && supportsPassiveEvents ? {passive: true} : undefined;
     parent.addEventListener('scroll', this.onContainerScroll, options);
     this.dettachParentCallback = () => {
       parent.removeEventListener('scroll', this.onContainerScroll, options);

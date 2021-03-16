@@ -1,6 +1,6 @@
 machine:
   node:
-    version: 8.9.1
+    version: 10.24.0
 
 dependencies:
   override:
