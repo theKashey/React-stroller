@@ -36,8 +36,8 @@ export interface IComponentState {
   clientWidth: number;
   clientHeight: number;
 
-  targetWidth: number;
-  targetHeight: number;
+  targetWidth?: number;
+  targetHeight?: number;
 
   scrollLeft: number;
   scrollTop: number;
@@ -75,7 +75,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
   private scrollableParent: HTMLElement | undefined = undefined;
   private scrollContainer: HTMLElement | null = null;
   private barRef: HTMLElement | undefined = undefined;
-  private dettachParentCallback: null | (() => void);
+  private dettachParentCallback: null | (() => void) = null;
 
   componentDidMount() {
     this.scrollableParent = findScrollableParent(this.scrollContainer || this.topNode!, this.props.axis);
@@ -168,8 +168,8 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
     const scrollWidth = topNode.scrollWidth;
     const scrollHeight = topNode.scrollHeight;
 
-    const targetWidth = this.topNode.clientWidth;
-    const targetHeight = this.topNode.clientHeight;
+    const targetWidth = this.topNode?.clientWidth;
+    const targetHeight = this.topNode?.clientHeight;
 
     const clientWidth = topNode.clientWidth;
     const clientHeight = topNode.clientHeight;
@@ -179,7 +179,7 @@ export class Stroller extends React.Component<IStrollerProps, IComponentState> {
 
     const st: any = this.state;
 
-    const {axis = 'vertical', targetAxis} = this.props;
+    const {axis = 'vertical' } = this.props;
 
     const mainScroll = extractValues(st, axis);
 

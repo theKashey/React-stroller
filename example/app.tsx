@@ -90,15 +90,13 @@ const positions = {
 
 const NuanCarBar: React.SFC<IStrollerBarProps> = ({
                                                     mainScroll,
-                                                    targetScroll,
+                                                    targetScroll = { scrollSpace: 10, space: 6 },
                                                     forwardRef,
                                                     location,
                                                     dragging,
                                                     draggable,
                                                     oppositePosition,
-
-                                                    axis,
-                                                    targetAxis
+                                                    targetAxis = 'vertical'
                                                   }) => {
   const factor = mainScroll.scroll / (mainScroll.scrollSpace - mainScroll.space);
   const length =
