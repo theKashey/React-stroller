@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Should render correctly Strollable 1`] = `
+exports[`Strollable should render correctly 1`] = `
 <div>
   <div
     style="height: 100%; width: 100%; overflow: hidden; max-width: inherit; max-height: inherit;"
@@ -16,7 +16,7 @@ exports[`Should render correctly Strollable 1`] = `
 </div>
 `;
 
-exports[`Should render correctly StrollableContainer 1`] = `
+exports[`StrollableContainer should render correctly 1`] = `
 <div>
   <div
     style="height: 100%; width: 100%; max-width: inherit; max-height: inherit;"
