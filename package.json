@@ -17,14 +17,14 @@
     "analyze": "ts-react-toolbox analyze"
   },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "4.10.1",
+    "@size-limit/preset-small-lib": "^4.10.1",
     "@testing-library/react": "^11.2.5",
     "prettier": "^2.2.1",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
-    "size-limit": "4.10.1",
-    "styled-components": "5.2.1",
-    "ts-react-toolbox": "1.1.1"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "size-limit": "^4.10.1",
+    "styled-components": "^5.2.1",
+    "ts-react-toolbox": "^1.1.1"
   },
   "engines": {
     "node": ">=10.24.0"
@@ -48,9 +48,9 @@
     "custom scrollbar"
   ],
   "dependencies": {
-    "detect-passive-events": "2.0.3",
-    "faste": "1.0.3",
-    "tslib": "2.1.0"
+    "detect-passive-events": "^2.0.3",
+    "faste": "^1.0.3",
+    "tslib": "^2.1.0"
   },
   "types": "dist/es5/index.d.ts",
   "jsnext:main": "dist/es2015/index.js",
