@@ -10,7 +10,6 @@ describe("Strollable", () => {
   });
 });
 
-
 describe("StrollableContainer", () => {
   it("should render correctly", () => {
     const { container } = render(
@@ -22,12 +21,13 @@ describe("StrollableContainer", () => {
 
   it("should handle scroll", () => {
     const mockOnScroll = jest.fn();
-    const { container } = render(
+    const { getByTestId } = render(
       <StrollableContainer onScroll={mockOnScroll}>child</StrollableContainer>
     );
 
-    fireEvent.scroll(container);
-    
+    const scrollableElement = getByTestId("scrollable");
+    fireEvent.scroll(scrollableElement);
+
     expect(mockOnScroll).toHaveBeenCalledTimes(1);
-  })
+  });
 });

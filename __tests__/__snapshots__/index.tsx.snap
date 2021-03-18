@@ -6,6 +6,7 @@ exports[`Strollable should render correctly 1`] = `
     style="height: 100%; width: 100%; overflow: hidden; max-width: inherit; max-height: inherit;"
   >
     <div
+      data-testid="scrollable"
       style="width: calc(100% + 0px); height: 100%; max-width: inherit; max-height: inherit; position: relative; overflow-y: scroll; padding-right: 24px; box-sizing: content-box;"
     >
       <div
@@ -28,6 +29,7 @@ exports[`StrollableContainer should render correctly 1`] = `
         style="height: 100%; width: 100%; overflow: hidden; max-width: inherit; max-height: inherit;"
       >
         <div
+          data-testid="scrollable"
           style="width: calc(100% + 0px); height: 100%; max-width: inherit; max-height: inherit; position: relative; overflow-y: scroll; padding-right: 24px; box-sizing: content-box;"
         >
           <div

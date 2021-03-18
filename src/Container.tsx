@@ -60,7 +60,7 @@ export class Strollable extends React.Component<IContainerProps> {
     const {children, axis, overscroll = false, className, gap = 0, minScrollbarWidth = 0, containerStyles = {}} = this.props;
     return (
       <div style={containerStyle} className={className}>
-        <div style={getStyle(Math.max(minScrollbarWidth, this.scrollWidth), gap, overscroll, axis)}>
+        <div style={getStyle(Math.max(minScrollbarWidth, this.scrollWidth), gap, overscroll, axis)} data-testId="scrollable">
           <div style={{...subcontainerStyle, ...containerStyles}}>
             {children}
           </div>
