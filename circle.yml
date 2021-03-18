@@ -1,11 +1,12 @@
-machine:
-  node:
-    version: 10.24.0
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:latest-browsers
 
-dependencies:
-  override:
-    - yarn
+    working_directory: ~/repo
 
-test:
-  override:
-    - yarn test:ci
+    steps:
+      - checkout
+      - run: yarn
+      - run: yarn test:ci
